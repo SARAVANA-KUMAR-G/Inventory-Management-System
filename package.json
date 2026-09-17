@@ -1,0 +1,13 @@
+{
+  "name": "smart-inventory-management-system",
+  "version": "1.0.0",
+  "description": "Smart Inventory Management System conforming to Architecture & Engineering Specifications",
+  "scripts": {
+    "start:backend": "npm --prefix inventory-management-backend start",
+    "dev:backend": "npm --prefix inventory-management-backend run dev",
+    "dev:frontend": "npm --prefix inventory-management-frontend run dev",
+    "build:frontend": "npm --prefix inventory-management-frontend run build",
+    "seed:backend": "npm --prefix inventory-management-backend run prisma:seed"
+  }
+}
+

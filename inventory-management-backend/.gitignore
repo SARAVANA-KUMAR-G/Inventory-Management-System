@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Uploads and temporary directories
+uploads/
+scratch/
+.system_generated/
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
