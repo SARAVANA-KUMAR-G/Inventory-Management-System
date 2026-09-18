@@ -419,11 +419,6 @@ Audit/activity logs - Multi-branch inventory - Customer management -
 Advanced returns/refunds - Automated backups - Granular permissions -
 Real-time inventory updates
 
-## Screenshots
-
-Suggested screenshots for the repository: - Login - Dashboard -
-Products - POS - Stock operations - Reports - Mobile UI
-
 ## Author
 
 **Saravana Kumar G.**\
