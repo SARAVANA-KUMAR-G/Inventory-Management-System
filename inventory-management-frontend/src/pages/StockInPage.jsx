@@ -129,11 +129,11 @@ export function StockInPage() {
   return (
     <div className="space-y-6 max-w-6xl">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-          <ArrowDownToLine className="w-7 h-7 text-emerald-600" />
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <ArrowDownToLine className="w-6 sm:w-7 h-6 sm:h-7 text-emerald-600" />
           Stock In / Receiving
         </h1>
-        <p className="text-sm font-medium text-slate-700 mt-1">
+        <p className="text-xs sm:text-sm font-medium text-slate-700 mt-1">
           Receive new inventory from suppliers or restocks to increase available balance.
         </p>
       </div>
@@ -155,9 +155,9 @@ export function StockInPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Main Form */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs">
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-6 shadow-xs">
           <h2 className="text-base font-bold text-slate-900 mb-4">Stock In Details</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -169,7 +169,7 @@ export function StockInPage() {
                 value={selectedProductId}
                 onChange={(e) => handleProductChange(e.target.value)}
                 required
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors"
               >
                 <option value="">Select a product...</option>
                 {products.map((p) => (
@@ -193,7 +193,7 @@ export function StockInPage() {
                   onChange={(e) => setQuantity(e.target.value)}
                   placeholder="e.g. 50"
                   required
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors placeholder:text-slate-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors placeholder:text-slate-500"
                 />
               </div>
 
@@ -208,7 +208,7 @@ export function StockInPage() {
                   value={unitCost}
                   onChange={(e) => setUnitCost(e.target.value)}
                   placeholder="e.g. 12.50"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors placeholder:text-slate-500"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors placeholder:text-slate-500"
                 />
               </div>
             </div>
@@ -222,7 +222,7 @@ export function StockInPage() {
                 value={supplier}
                 onChange={(e) => setSupplier(e.target.value)}
                 placeholder="e.g. Acme Wholesale Ltd."
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors placeholder:text-slate-500"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors placeholder:text-slate-500"
               />
             </div>
 
@@ -235,7 +235,7 @@ export function StockInPage() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="e.g. Batch #401, invoice #8821"
-                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors placeholder:text-slate-500"
+                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors placeholder:text-slate-500"
               />
             </div>
 
@@ -247,8 +247,8 @@ export function StockInPage() {
 
         {/* Live Calculation Preview Card */}
         <div className="space-y-4">
-          <div className="bg-gradient-to-br from-slate-950 to-slate-900 text-white rounded-2xl p-6 border border-slate-800 shadow-md">
-            <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
+          <div className="bg-gradient-to-br from-slate-950 to-slate-900 text-white rounded-2xl p-4 sm:p-6 border border-slate-800 shadow-md">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
               <Package className="w-4 h-4 text-emerald-400" />
               Stock Impact Preview
             </h3>
@@ -257,20 +257,20 @@ export function StockInPage() {
               <div className="space-y-4">
                 <div>
                   <span className="text-xs font-semibold text-slate-300 block">Selected Product</span>
-                  <span className="font-black text-lg text-white">{selectedProduct.name}</span>
+                  <span className="font-black text-base sm:text-lg text-white">{selectedProduct.name}</span>
                   <span className="text-xs font-mono font-bold text-emerald-400 block">SKU: {selectedProduct.sku}</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800">
                   <div>
                     <span className="text-xs font-semibold text-slate-300 block">Current Stock</span>
-                    <span className="text-xl font-black text-white">
+                    <span className="text-lg sm:text-xl font-black text-white">
                       {selectedProduct.currentStock} {selectedProduct.unit}
                     </span>
                   </div>
                   <div>
                     <span className="text-xs font-semibold text-slate-300 block">Adding</span>
-                    <span className="text-xl font-black text-emerald-400">
+                    <span className="text-lg sm:text-xl font-black text-emerald-400">
                       +{Number(quantity) || 0}
                     </span>
                   </div>
@@ -278,13 +278,13 @@ export function StockInPage() {
 
                 <div className="pt-3 border-t border-slate-800">
                   <span className="text-xs font-semibold text-slate-300 block">Projected Balance</span>
-                  <span className="text-2xl font-black text-emerald-300 font-mono">
+                  <span className="text-xl sm:text-2xl font-black text-emerald-300 font-mono">
                     {calculatedNewStock} {selectedProduct.unit}
                   </span>
                 </div>
               </div>
             ) : (
-              <p className="text-sm font-medium text-slate-300 py-6 text-center">
+              <p className="text-xs sm:text-sm font-medium text-slate-300 py-6 text-center">
                 Select a product from the form to view real-time balance calculations.
               </p>
             )}
@@ -293,9 +293,39 @@ export function StockInPage() {
       </div>
 
       {/* Recent Stock In Table */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs">
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-6 shadow-xs">
         <h2 className="text-base font-bold text-slate-900 mb-4">Recent Stock In Entries</h2>
-        <div className="overflow-x-auto">
+
+        {/* Mobile Cards (< md) */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {recentTransactions.length === 0 ? (
+            <div className="py-8 text-center text-slate-600 font-semibold text-xs">
+              No stock-in transactions recorded yet.
+            </div>
+          ) : (
+            recentTransactions.map((tx) => (
+              <div key={tx.id} className="py-3 px-1 space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <h4 className="font-bold text-sm text-slate-900 leading-tight">{tx.productName}</h4>
+                    <p className="text-xs font-mono text-slate-600 font-semibold">SKU: {tx.productSku}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <span className="font-black text-sm text-emerald-700 font-mono block">+{tx.quantity} {tx.unit}</span>
+                    <span className="text-[11px] text-slate-600 font-medium">Bal: {tx.balanceAfter}</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between text-[11px] text-slate-600 pt-1 border-t border-slate-100">
+                  <span>{new Date(tx.createdAt).toLocaleDateString()} by {tx.userName}</span>
+                  {tx.reason && <span className="truncate max-w-[140px] font-medium">{tx.reason}</span>}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-sm text-slate-700">
             <thead className="bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
               <tr>

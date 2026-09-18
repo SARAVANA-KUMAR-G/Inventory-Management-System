@@ -43,14 +43,14 @@ export function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 flex flex-col justify-center items-center p-4">
-      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 border border-slate-100/10">
-        <div className="flex flex-col items-center mb-8">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white shadow-lg shadow-emerald-900/30 mb-3">
-            <Boxes className="w-8 h-8" />
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 flex flex-col justify-center items-center p-3 sm:p-4">
+      <div className="w-full max-w-md bg-white rounded-2xl sm:rounded-3xl shadow-2xl p-5 sm:p-8 border border-slate-100/10">
+        <div className="flex flex-col items-center mb-6 sm:mb-8 text-center">
+          <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white shadow-lg shadow-emerald-900/30 mb-3">
+            <Boxes className="w-7 h-7 sm:w-8 sm:h-8" />
           </div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Smart Inventory V1</h1>
-          <p className="text-sm text-slate-700 font-medium mt-1">Sign in to your staff or admin portal</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Smart Inventory V1</h1>
+          <p className="text-xs sm:text-sm text-slate-700 font-medium mt-1">Sign in to your staff or admin portal</p>
         </div>
 
         {error && (

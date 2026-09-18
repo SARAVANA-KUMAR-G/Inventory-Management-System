@@ -70,19 +70,55 @@ export function CategoriesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Product Categories</h1>
-          <p className="text-sm text-slate-700 font-medium">Group catalog products into organized hierarchical categories</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Product Categories</h1>
+          <p className="text-xs sm:text-sm text-slate-700 font-medium">Group catalog products into organized hierarchical categories</p>
         </div>
-        <Button onClick={handleOpenAdd} size="sm" className="font-bold">
+        <Button onClick={handleOpenAdd} size="sm" className="font-bold w-full sm:w-auto py-2">
           <Plus className="w-4 h-4" />
           Add Category
         </Button>
       </div>
 
       <Card className="p-0 overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile Category Cards (< md) */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {loading ? (
+            <div className="py-12 text-center text-slate-600 font-medium">Loading categories...</div>
+          ) : categories.length === 0 ? (
+            <div className="py-12 text-center text-slate-600 font-medium px-4">No categories defined yet</div>
+          ) : (
+            categories.map((c) => (
+              <div key={c.id} className="p-3.5 space-y-2.5 hover:bg-slate-50/70 transition-colors">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2 min-w-0">
+                    <FolderTree className="w-4 h-4 text-emerald-600 shrink-0" />
+                    <h4 className="font-bold text-sm text-slate-900 truncate">{c.name}</h4>
+                  </div>
+                  <Badge variant="info" className="shrink-0">{c.productCount} items</Badge>
+                </div>
+                {c.description && (
+                  <p className="text-xs text-slate-600 line-clamp-2">{c.description}</p>
+                )}
+                <div className="flex justify-end pt-1">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleOpenEdit(c)}
+                    className="w-full font-semibold text-xs py-1.5"
+                  >
+                    <Edit2 className="w-3.5 h-3.5 mr-1" />
+                    Edit Category
+                  </Button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop Categories Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-100 text-xs font-bold text-slate-800 uppercase tracking-wider">
@@ -155,11 +191,11 @@ export function CategoriesPage() {
             placeholder="Brief details about products in this category"
           />
 
-          <div className="flex justify-end gap-2 pt-4 border-t border-slate-100">
-            <Button variant="secondary" onClick={() => setShowModal(false)}>
+          <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-4 border-t border-slate-100">
+            <Button variant="secondary" onClick={() => setShowModal(false)} className="w-full sm:w-auto font-semibold">
               Cancel
             </Button>
-            <Button type="submit" loading={isSubmitting}>
+            <Button type="submit" loading={isSubmitting} className="w-full sm:w-auto font-bold">
               {editingCategory ? 'Save Changes' : 'Create Category'}
             </Button>
           </div>

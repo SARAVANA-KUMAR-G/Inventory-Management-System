@@ -89,31 +89,31 @@ export function ReportsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <BarChart3 className="w-7 h-7 text-indigo-600" />
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <BarChart3 className="w-6 sm:w-7 h-6 sm:h-7 text-indigo-600" />
             Operational Reports & Analytics
           </h1>
-          <p className="text-sm text-slate-700 font-medium mt-1">
+          <p className="text-xs sm:text-sm text-slate-700 font-medium mt-1">
             Exportable inventory, stock ledger movements, and sales performance summaries.
           </p>
         </div>
 
         <Button
           onClick={() => handleExport(activeTab)}
-          className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white self-start sm:self-auto font-bold"
+          className="flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white w-full sm:w-auto font-bold py-2"
         >
           <Download className="w-4 h-4" />
           Export CSV ({activeTab.toUpperCase()})
         </Button>
       </div>
 
-      {/* Report Tabs */}
-      <div className="flex border-b border-slate-200">
+      {/* Report Tabs (Horizontally scrollable on mobile) */}
+      <div className="flex border-b border-slate-200 overflow-x-auto whitespace-nowrap gap-1 pb-px">
         <button
           onClick={() => setActiveTab('stock')}
-          className={`px-5 py-3 text-sm font-bold border-b-2 transition-colors flex items-center gap-2 ${
+          className={`px-3 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-bold border-b-2 transition-colors flex items-center gap-1.5 shrink-0 ${
             activeTab === 'stock'
               ? 'border-emerald-600 text-emerald-700'
               : 'border-transparent text-slate-700 hover:text-slate-950'
@@ -124,7 +124,7 @@ export function ReportsPage() {
         </button>
         <button
           onClick={() => setActiveTab('movement')}
-          className={`px-5 py-3 text-sm font-bold border-b-2 transition-colors flex items-center gap-2 ${
+          className={`px-3 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-bold border-b-2 transition-colors flex items-center gap-1.5 shrink-0 ${
             activeTab === 'movement'
               ? 'border-emerald-600 text-emerald-700'
               : 'border-transparent text-slate-700 hover:text-slate-950'
@@ -135,7 +135,7 @@ export function ReportsPage() {
         </button>
         <button
           onClick={() => setActiveTab('sales')}
-          className={`px-5 py-3 text-sm font-bold border-b-2 transition-colors flex items-center gap-2 ${
+          className={`px-3 sm:px-5 py-2.5 sm:py-3 text-xs sm:text-sm font-bold border-b-2 transition-colors flex items-center gap-1.5 shrink-0 ${
             activeTab === 'sales'
               ? 'border-emerald-600 text-emerald-700'
               : 'border-transparent text-slate-700 hover:text-slate-950'
@@ -147,16 +147,16 @@ export function ReportsPage() {
       </div>
 
       {/* Filter Toolbar */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-wrap items-center gap-3">
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-3 sm:p-4 shadow-xs flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-2.5 sm:gap-3">
         {activeTab === 'stock' && (
-          <div className="w-48">
+          <div className="w-full sm:w-48">
             <label className="block text-[11px] font-bold text-slate-800 uppercase tracking-wider mb-1">
               Stock Status
             </label>
             <select
               value={stockStatus}
               onChange={(e) => setStockStatus(e.target.value)}
-              className="w-full px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              className="w-full px-3 py-2 sm:py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
             >
               <option value="">All Stock Levels</option>
               <option value="IN_STOCK">In Stock</option>
@@ -167,7 +167,7 @@ export function ReportsPage() {
         )}
 
         {(activeTab === 'movement' || activeTab === 'sales') && (
-          <>
+          <div className="grid grid-cols-2 gap-2.5 w-full sm:w-auto">
             <div>
               <label className="block text-[11px] font-bold text-slate-800 uppercase tracking-wider mb-1">
                 From Date
@@ -176,7 +176,7 @@ export function ReportsPage() {
                 type="date"
                 value={fromDate}
                 onChange={(e) => setFromDate(e.target.value)}
-                className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
               />
             </div>
 
@@ -188,16 +188,16 @@ export function ReportsPage() {
                 type="date"
                 value={toDate}
                 onChange={(e) => setToDate(e.target.value)}
-                className="px-3 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
               />
             </div>
-          </>
+          </div>
         )}
 
-        <div className="ml-auto flex items-center gap-2">
+        <div className="sm:ml-auto flex items-center gap-2">
           <button
             onClick={loadActiveReport}
-            className="px-3 py-1.5 text-xs font-bold rounded-xl border border-slate-300 text-slate-800 hover:bg-slate-50 flex items-center gap-1.5"
+            className="w-full sm:w-auto justify-center px-3 py-2 sm:py-1.5 text-xs font-bold rounded-xl border border-slate-300 text-slate-800 hover:bg-slate-50 flex items-center gap-1.5"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh
@@ -209,7 +209,7 @@ export function ReportsPage() {
       {activeTab === 'stock' && (
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-slate-800">
+            <table className="w-full text-left text-sm text-slate-800 min-w-[680px]">
               <thead className="bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
                 <tr>
                   <th className="py-3 px-4">SKU</th>
@@ -263,7 +263,7 @@ export function ReportsPage() {
       {activeTab === 'movement' && (
         <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm text-slate-800">
+            <table className="w-full text-left text-sm text-slate-800 min-w-[680px]">
               <thead className="bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
                 <tr>
                   <th className="py-3 px-4">Date</th>
@@ -320,28 +320,28 @@ export function ReportsPage() {
         <div className="space-y-4">
           {/* Sales Summary KPI Cards */}
           {salesReport.summary && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-              <div className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
-                <span className="text-xs text-slate-700 font-bold uppercase">Total Sales Count</span>
-                <span className="text-2xl font-black text-slate-900 font-mono block mt-1">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
+              <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+                <span className="text-[11px] sm:text-xs text-slate-700 font-bold uppercase">Sales Count</span>
+                <span className="text-xl sm:text-2xl font-black text-slate-900 font-mono block mt-1">
                   {salesReport.summary.totalSalesCount || 0}
                 </span>
               </div>
-              <div className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
-                <span className="text-xs text-slate-700 font-bold uppercase">Total Revenue</span>
-                <span className="text-2xl font-black text-emerald-700 font-mono block mt-1">
+              <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+                <span className="text-[11px] sm:text-xs text-slate-700 font-bold uppercase">Total Revenue</span>
+                <span className="text-xl sm:text-2xl font-black text-emerald-700 font-mono block mt-1">
                   ${(salesReport.summary.totalRevenue || 0).toFixed(2)}
                 </span>
               </div>
-              <div className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
-                <span className="text-xs text-slate-700 font-bold uppercase">Total COGS</span>
-                <span className="text-2xl font-black text-slate-800 font-mono block mt-1">
+              <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+                <span className="text-[11px] sm:text-xs text-slate-700 font-bold uppercase">Total COGS</span>
+                <span className="text-xl sm:text-2xl font-black text-slate-800 font-mono block mt-1">
                   ${(salesReport.summary.totalCOGS || 0).toFixed(2)}
                 </span>
               </div>
-              <div className="p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
-                <span className="text-xs text-slate-700 font-bold uppercase">Gross Profit</span>
-                <span className="text-2xl font-black text-indigo-700 font-mono block mt-1">
+              <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+                <span className="text-[11px] sm:text-xs text-slate-700 font-bold uppercase">Gross Profit</span>
+                <span className="text-xl sm:text-2xl font-black text-indigo-700 font-mono block mt-1">
                   ${(salesReport.summary.grossProfit || 0).toFixed(2)}
                 </span>
               </div>
@@ -351,7 +351,7 @@ export function ReportsPage() {
           {/* Sales Detailed Table */}
           <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm text-slate-800">
+              <table className="w-full text-left text-sm text-slate-800 min-w-[780px]">
                 <thead className="bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
                   <tr>
                     <th className="py-3 px-4">Date</th>

@@ -43,6 +43,9 @@ export function POSPage() {
   const [cashTendered, setCashTendered] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Mobile View Switcher ('catalog' | 'cart')
+  const [mobileActiveView, setMobileActiveView] = useState('catalog');
+
   // Completed Invoice State
   const [completedSale, setCompletedSale] = useState(null);
   const [showReceiptModal, setShowReceiptModal] = useState(false);
@@ -210,6 +213,7 @@ export function POSPage() {
         setShowPaymentModal(false);
         setShowReceiptModal(true);
         clearCart();
+        setMobileActiveView('catalog');
 
         // Refresh product stock list locally
         const refreshed = await apiClient.get('/products?pageSize=100&includeInactive=false');
@@ -234,27 +238,57 @@ export function POSPage() {
   });
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 h-[calc(100vh-6.5rem)]">
+    <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 lg:gap-6 h-[calc(100vh-5.5rem)] sm:h-[calc(100vh-6.5rem)] relative">
+      {/* Mobile Segmented Switcher (Visible on screens < lg) */}
+      <div className="flex lg:hidden bg-slate-200/90 p-1 rounded-xl gap-1 shrink-0">
+        <button
+          type="button"
+          onClick={() => setMobileActiveView('catalog')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+            mobileActiveView === 'catalog'
+              ? 'bg-white text-slate-900 shadow-xs'
+              : 'text-slate-700 hover:text-slate-950'
+          }`}
+        >
+          <Search className="w-3.5 h-3.5" />
+          <span>Catalog ({filteredProducts.length})</span>
+        </button>
+        <button
+          type="button"
+          onClick={() => setMobileActiveView('cart')}
+          className={`flex-1 py-2 text-xs font-bold rounded-lg flex items-center justify-center gap-1.5 transition-all ${
+            mobileActiveView === 'cart'
+              ? 'bg-emerald-600 text-white shadow-xs'
+              : 'text-slate-700 hover:text-slate-950'
+          }`}
+        >
+          <ShoppingCart className="w-3.5 h-3.5" />
+          <span>Cart ({cart.reduce((s, i) => s + i.quantity, 0)}) • ${grandTotal.toFixed(2)}</span>
+        </button>
+      </div>
+
       {/* LEFT: Product Catalog & Fast Search */}
-      <div className="flex-1 flex flex-col min-w-0 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
+      <div className={`flex-1 flex-col min-w-0 bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden ${
+        mobileActiveView === 'catalog' ? 'flex' : 'hidden lg:flex'
+      }`}>
         {/* Search & Category Filter Header */}
-        <div className="p-4 border-b border-slate-100 flex flex-col sm:flex-row gap-3">
+        <div className="p-3 sm:p-4 border-b border-slate-100 flex flex-col sm:flex-row gap-2.5 sm:gap-3">
           <div className="flex-1 relative">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-3 pointer-events-none" />
+            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5 sm:top-3 pointer-events-none" />
             <input
               ref={searchInputRef}
               type="text"
-              placeholder="Search product by name, SKU or Barcode... (Press F2 to focus)"
+              placeholder="Search by name, SKU or Barcode... (F2)"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all"
+              className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:bg-white transition-all"
             />
           </div>
 
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           >
             <option value="">All Categories</option>
             {categories.map(c => (
@@ -264,7 +298,7 @@ export function POSPage() {
         </div>
 
         {/* Product Cards Grid */}
-        <div className="flex-1 overflow-y-auto p-4 grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-3">
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4 grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-3 pb-16 lg:pb-4">
           {filteredProducts.map((p) => {
             const outOfStock = p.currentStock <= 0;
             const inCart = cart.find(i => i.productId === p.id);
@@ -317,7 +351,9 @@ export function POSPage() {
       </div>
 
       {/* RIGHT: POS Register Cart & Checkout Pane */}
-      <div className="w-full lg:w-96 xl:w-[420px] flex flex-col bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden shrink-0">
+      <div className={`w-full lg:w-96 xl:w-[420px] flex-col bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden shrink-0 ${
+        mobileActiveView === 'cart' ? 'flex' : 'hidden lg:flex'
+      }`}>
         {/* Customer & Hold Header */}
         <div className="p-4 border-b border-slate-100 space-y-3 bg-slate-50/40">
           <div className="flex items-center justify-between">
@@ -509,43 +545,43 @@ export function POSPage() {
 
           <div>
             <label className="text-xs font-bold text-slate-800 block mb-2">Select Payment Method</label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-1.5 sm:gap-2">
               <button
                 type="button"
                 onClick={() => setPaymentMethod('CASH')}
-                className={`py-3 px-2 rounded-xl border flex flex-col items-center gap-1.5 font-bold text-xs transition-all ${
+                className={`py-2.5 sm:py-3 px-1.5 sm:px-2 rounded-xl border flex flex-col items-center gap-1 sm:gap-1.5 font-bold text-[11px] sm:text-xs transition-all ${
                   paymentMethod === 'CASH'
                     ? 'bg-emerald-50 border-emerald-500 text-emerald-900 shadow-2xs'
                     : 'bg-white border-slate-300 text-slate-800 hover:bg-slate-50'
                 }`}
               >
-                <Banknote className="w-5 h-5" />
+                <Banknote className="w-4 sm:w-5 h-4 sm:h-5" />
                 Cash
               </button>
 
               <button
                 type="button"
                 onClick={() => setPaymentMethod('CARD')}
-                className={`py-3 px-2 rounded-xl border flex flex-col items-center gap-1.5 font-bold text-xs transition-all ${
+                className={`py-2.5 sm:py-3 px-1.5 sm:px-2 rounded-xl border flex flex-col items-center gap-1 sm:gap-1.5 font-bold text-[11px] sm:text-xs transition-all ${
                   paymentMethod === 'CARD'
                     ? 'bg-emerald-50 border-emerald-500 text-emerald-900 shadow-2xs'
                     : 'bg-white border-slate-300 text-slate-800 hover:bg-slate-50'
                 }`}
               >
-                <CreditCard className="w-5 h-5" />
+                <CreditCard className="w-4 sm:w-5 h-4 sm:h-5" />
                 Card POS
               </button>
 
               <button
                 type="button"
                 onClick={() => setPaymentMethod('UPI')}
-                className={`py-3 px-2 rounded-xl border flex flex-col items-center gap-1.5 font-bold text-xs transition-all ${
+                className={`py-2.5 sm:py-3 px-1.5 sm:px-2 rounded-xl border flex flex-col items-center gap-1 sm:gap-1.5 font-bold text-[11px] sm:text-xs transition-all ${
                   paymentMethod === 'UPI'
                     ? 'bg-emerald-50 border-emerald-500 text-emerald-900 shadow-2xs'
                     : 'bg-white border-slate-300 text-slate-800 hover:bg-slate-50'
                 }`}
               >
-                <QrCode className="w-5 h-5" />
+                <QrCode className="w-4 sm:w-5 h-4 sm:h-5" />
                 UPI / QR
               </button>
             </div>
@@ -598,7 +634,7 @@ export function POSPage() {
         {completedSale && (
           <div className="space-y-5">
             {/* Printable Area */}
-            <div id="printable-receipt" className="p-6 bg-slate-50 rounded-2xl border border-slate-300 font-mono text-xs space-y-3">
+            <div id="printable-receipt" className="p-3 sm:p-6 bg-slate-50 rounded-2xl border border-slate-300 font-mono text-xs space-y-3">
               <div className="text-center space-y-1">
                 <h3 className="font-bold text-base text-slate-950 font-sans">Smart Retail & Inventory</h3>
                 <p className="text-[11px] text-slate-700 font-medium">123 Business Avenue, Suite 100, Metro City</p>
@@ -687,6 +723,28 @@ export function POSPage() {
           </div>
         )}
       </Modal>
+
+      {/* Floating Checkout Bar on Mobile when viewing catalog */}
+      {cart.length > 0 && mobileActiveView === 'catalog' && (
+        <div className="lg:hidden fixed bottom-3 inset-x-3 z-30">
+          <button
+            type="button"
+            onClick={() => setMobileActiveView('cart')}
+            className="w-full bg-slate-900 text-white p-3.5 rounded-2xl shadow-xl flex items-center justify-between font-bold border border-slate-700/50 active:scale-[0.99] transition-transform"
+          >
+            <div className="flex items-center gap-2">
+              <span className="bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
+                {cart.reduce((s, i) => s + i.quantity, 0)}
+              </span>
+              <span className="text-sm">View Order & Checkout</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-emerald-400 font-mono text-base">
+              <span>${grandTotal.toFixed(2)}</span>
+              <ArrowRight className="w-4 h-4" />
+            </div>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

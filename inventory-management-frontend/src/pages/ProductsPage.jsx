@@ -190,15 +190,15 @@ export function ProductsPage() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Products Catalog</h1>
-          <p className="text-sm text-slate-700 font-medium">Manage SKUs, barcodes, pricing, stock levels and thresholds</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Products Catalog</h1>
+          <p className="text-xs sm:text-sm text-slate-700 font-medium">Manage SKUs, barcodes, pricing, stock levels and thresholds</p>
         </div>
-        <div className="flex items-center gap-3">
-          <Button variant="secondary" onClick={handleExport} size="sm" className="font-semibold">
+        <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto">
+          <Button variant="secondary" onClick={handleExport} size="sm" className="flex-1 sm:flex-initial font-semibold text-xs sm:text-sm py-2">
             <Download className="w-4 h-4" />
             Export Excel
           </Button>
-          <Button onClick={handleOpenAdd} size="sm" className="font-bold">
+          <Button onClick={handleOpenAdd} size="sm" className="flex-1 sm:flex-initial font-bold text-xs sm:text-sm py-2">
             <Plus className="w-4 h-4" />
             Add Product
           </Button>
@@ -206,44 +206,121 @@ export function ProductsPage() {
       </div>
 
       {/* Filter Bar */}
-      <Card className="p-4 flex flex-col md:flex-row items-center gap-3">
+      <Card className="p-3 sm:p-4 flex flex-col md:flex-row items-stretch md:items-center gap-2.5 sm:gap-3">
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+          <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5 sm:top-3 pointer-events-none" />
           <input
             type="text"
             placeholder="Search by SKU, product name, or barcode..."
             value={search}
             onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
 
-        <select
-          value={selectedCategory}
-          onChange={(e) => { setSelectedCategory(e.target.value); setPage(1); }}
-          className="w-full md:w-48 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900"
-        >
-          <option value="">All Categories</option>
-          {categories.map(c => (
-            <option key={c.id} value={c.id}>{c.name}</option>
-          ))}
-        </select>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:flex items-center gap-2.5 sm:gap-3 w-full md:w-auto">
+          <select
+            value={selectedCategory}
+            onChange={(e) => { setSelectedCategory(e.target.value); setPage(1); }}
+            className="w-full md:w-48 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900"
+          >
+            <option value="">All Categories</option>
+            {categories.map(c => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
 
-        <select
-          value={stockStatus}
-          onChange={(e) => { setStockStatus(e.target.value); setPage(1); }}
-          className="w-full md:w-44 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900"
-        >
-          <option value="">All Stock Levels</option>
-          <option value="in_stock">In Stock</option>
-          <option value="low_stock">Low Stock Alerts</option>
-          <option value="out_of_stock">Out of Stock</option>
-        </select>
+          <select
+            value={stockStatus}
+            onChange={(e) => { setStockStatus(e.target.value); setPage(1); }}
+            className="w-full md:w-44 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900"
+          >
+            <option value="">All Stock Levels</option>
+            <option value="in_stock">In Stock</option>
+            <option value="low_stock">Low Stock Alerts</option>
+            <option value="out_of_stock">Out of Stock</option>
+          </select>
+        </div>
       </Card>
 
-      {/* Products Table */}
+      {/* Products Table & Mobile Cards */}
       <Card className="p-0 overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile Product Cards (< md) */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {loading ? (
+            <div className="py-12 text-center text-slate-600 font-medium">
+              <div className="inline-block animate-spin rounded-full h-6 w-6 border-b-2 border-emerald-600"></div>
+            </div>
+          ) : products.length === 0 ? (
+            <div className="py-12 text-center text-slate-600 font-medium px-4">
+              No products found matching your search.
+            </div>
+          ) : (
+            products.map((p) => (
+              <div key={p.id} className="p-3.5 space-y-2.5 hover:bg-slate-50/70 transition-colors">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <h4 className="font-bold text-sm text-slate-900 leading-tight">{p.name}</h4>
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-slate-600 font-mono mt-0.5">
+                      <span>SKU: {p.sku}</span>
+                      {p.barcode && <span>• Barcode: {p.barcode}</span>}
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => handleToggleStatus(p)}
+                    className={`shrink-0 inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                      p.isActive ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-slate-100 text-slate-700 border border-slate-300'
+                    }`}
+                  >
+                    {p.isActive ? <CheckCircle2 className="w-3 h-3" /> : <XCircle className="w-3 h-3" />}
+                    {p.isActive ? 'Active' : 'Disabled'}
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs py-2 px-3 bg-slate-50 rounded-xl border border-slate-200/70">
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-600 block">Category</span>
+                    <span className="font-semibold text-slate-900 truncate block">{p.categoryName || 'General'}</span>
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-600 block">Current Stock</span>
+                    <div className="flex items-center gap-1.5 mt-0.5">
+                      <span className="font-bold text-slate-900">{p.currentStock} {p.unit}</span>
+                      {p.currentStock <= 0 ? (
+                        <Badge variant="danger" className="text-[10px] px-1.5 py-0">Out</Badge>
+                      ) : p.isLowStock ? (
+                        <Badge variant="warning" className="text-[10px] px-1.5 py-0">Low</Badge>
+                      ) : null}
+                    </div>
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-600 block">Cost Price</span>
+                    <span className="font-mono font-semibold text-slate-800">${p.costPrice.toFixed(2)}</span>
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-600 block">Selling Price</span>
+                    <span className="font-mono font-bold text-emerald-800">${p.sellingPrice.toFixed(2)}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end pt-1">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleOpenEdit(p)}
+                    className="w-full font-semibold text-xs py-1.5"
+                  >
+                    <Edit2 className="w-3.5 h-3.5 mr-1" />
+                    Edit Product
+                  </Button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop Products Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-100 text-xs font-bold text-slate-800 uppercase tracking-wider">
@@ -332,9 +409,9 @@ export function ProductsPage() {
         </div>
 
         {/* Pagination Controls */}
-        <div className="px-4 py-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-700 font-medium">
+        <div className="px-3 sm:px-4 py-3 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-700 font-medium">
           <span>Showing {products.length} of {meta.totalItems} products</span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
             <Button
               variant="secondary"
               size="sm"
@@ -458,11 +535,11 @@ export function ProductsPage() {
             />
           </div>
 
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
-            <Button variant="secondary" onClick={() => setShowAddModal(false)}>
+          <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2.5 sm:gap-3 pt-4 border-t border-slate-100">
+            <Button variant="secondary" onClick={() => setShowAddModal(false)} className="w-full sm:w-auto font-semibold">
               Cancel
             </Button>
-            <Button type="submit" loading={isSubmitting}>
+            <Button type="submit" loading={isSubmitting} className="w-full sm:w-auto font-bold">
               {editingProduct ? 'Save Changes' : 'Create Product'}
             </Button>
           </div>

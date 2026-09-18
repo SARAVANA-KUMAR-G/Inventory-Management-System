@@ -38,20 +38,22 @@ export function Modal({ isOpen, onClose, title, children, maxWidth = 'max-w-xl' 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-xs animate-fadeIn">
-      <div className={cn('bg-white rounded-2xl shadow-xl w-full border border-slate-200 overflow-hidden flex flex-col max-h-[90vh]', maxWidth)}>
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-          <h3 className="text-lg font-bold text-slate-900">{title}</h3>
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-2.5 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-fadeIn">
+      <div className={cn('bg-white rounded-2xl shadow-2xl w-full border border-slate-200 overflow-hidden flex flex-col max-h-[92vh]', maxWidth)}>
+        <div className="flex items-center justify-between px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-100">
+          <h3 className="text-base sm:text-lg font-bold text-slate-900 truncate pr-2">{title}</h3>
           <button
             onClick={onClose}
-            className="p-1 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors"
+            className="p-1 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors shrink-0"
+            title="Close dialog"
+            aria-label="Close dialog"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
         </div>
-        <div className="p-6 overflow-y-auto flex-1">
+        <div className="p-4 sm:p-6 overflow-y-auto flex-1">
           {children}
         </div>
       </div>

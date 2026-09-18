@@ -118,11 +118,11 @@ export function StockOutPage() {
   return (
     <div className="space-y-6 max-w-6xl">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-          <ArrowUpFromLine className="w-7 h-7 text-amber-600" />
+        <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+          <ArrowUpFromLine className="w-6 sm:w-7 h-6 sm:h-7 text-amber-600" />
           Stock Adjustment / Waste & Returns
         </h1>
-        <p className="text-sm font-medium text-slate-700 mt-1">
+        <p className="text-xs sm:text-sm font-medium text-slate-700 mt-1">
           Record stock reductions (damaged, expired, lost) or inventory audit corrections.
         </p>
       </div>
@@ -144,9 +144,9 @@ export function StockOutPage() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
         {/* Main Adjustment Form */}
-        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs">
+        <div className="lg:col-span-2 bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-6 shadow-xs">
           <h2 className="text-base font-bold text-slate-900 mb-4">Adjustment Details</h2>
 
           <form onSubmit={handleSubmit} className="space-y-4">
@@ -158,7 +158,7 @@ export function StockOutPage() {
                 value={selectedProductId}
                 onChange={(e) => setSelectedProductId(e.target.value)}
                 required
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors"
               >
                 <option value="">Select a product...</option>
                 {products.map((p) => (
@@ -177,7 +177,7 @@ export function StockOutPage() {
                 <select
                   value={adjustType}
                   onChange={(e) => handleTypeChange(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors"
                 >
                   <option value="ADJUSTMENT_OUT">Stock Out (Decrease Stock)</option>
                   <option value="ADJUSTMENT_IN">Stock In (Increase Stock)</option>
@@ -196,7 +196,7 @@ export function StockOutPage() {
                   onChange={(e) => setQuantity(e.target.value)}
                   placeholder="e.g. 5"
                   required
-                  className={`w-full px-3.5 py-2.5 bg-slate-50 border rounded-xl text-sm font-semibold text-slate-900 focus:outline-none transition-colors placeholder:text-slate-500 ${
+                  className={`w-full px-3.5 py-2.5 bg-slate-50 border rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none transition-colors placeholder:text-slate-500 ${
                     willBeNegative
                       ? 'border-rose-400 ring-2 ring-rose-500/20 bg-rose-50/20'
                       : 'border-slate-300 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600'
@@ -217,7 +217,7 @@ export function StockOutPage() {
               <select
                 value={reason}
                 onChange={(e) => setReason(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors"
               >
                 {adjustType === 'ADJUSTMENT_IN' ? (
                   <>
@@ -248,7 +248,7 @@ export function StockOutPage() {
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
                 placeholder="Provide details (e.g. dropped during unpacking, found 2 misplaced units on shelf B)"
-                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors placeholder:text-slate-500"
+                className="w-full px-3.5 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600 transition-colors placeholder:text-slate-500"
               />
             </div>
 
@@ -265,8 +265,8 @@ export function StockOutPage() {
 
         {/* Live Calculation Preview Card */}
         <div className="space-y-4">
-          <div className="bg-gradient-to-br from-slate-950 to-slate-900 text-white rounded-2xl p-6 border border-slate-800 shadow-md">
-            <h3 className="text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
+          <div className="bg-gradient-to-br from-slate-950 to-slate-900 text-white rounded-2xl p-4 sm:p-6 border border-slate-800 shadow-md">
+            <h3 className="text-xs sm:text-sm font-bold text-slate-200 uppercase tracking-wider mb-4 flex items-center gap-2">
               <Package className="w-4 h-4 text-amber-400" />
               Stock Impact Preview
             </h3>
@@ -275,21 +275,21 @@ export function StockOutPage() {
               <div className="space-y-4">
                 <div>
                   <span className="text-xs font-semibold text-slate-300 block">Selected Product</span>
-                  <span className="font-black text-lg text-white">{selectedProduct.name}</span>
+                  <span className="font-black text-base sm:text-lg text-white">{selectedProduct.name}</span>
                   <span className="text-xs font-mono font-bold text-amber-400 block">SKU: {selectedProduct.sku}</span>
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pt-3 border-t border-slate-800">
                   <div>
                     <span className="text-xs font-semibold text-slate-300 block">Current Stock</span>
-                    <span className="text-xl font-black text-white">
+                    <span className="text-lg sm:text-xl font-black text-white">
                       {currentStock} {selectedProduct.unit}
                     </span>
                   </div>
                   <div>
                     <span className="text-xs font-semibold text-slate-300 block">Adjustment</span>
                     <span
-                      className={`text-xl font-black ${
+                      className={`text-lg sm:text-xl font-black ${
                         adjustType === 'ADJUSTMENT_OUT' ? 'text-rose-400' : 'text-emerald-400'
                       }`}
                     >
@@ -301,7 +301,7 @@ export function StockOutPage() {
                 <div className="pt-3 border-t border-slate-800">
                   <span className="text-xs font-semibold text-slate-300 block">Projected Balance</span>
                   <span
-                    className={`text-2xl font-black font-mono ${
+                    className={`text-xl sm:text-2xl font-black font-mono ${
                       willBeNegative ? 'text-rose-400' : 'text-slate-100'
                     }`}
                   >
@@ -315,7 +315,7 @@ export function StockOutPage() {
                 </div>
               </div>
             ) : (
-              <p className="text-sm font-medium text-slate-300 py-6 text-center">
+              <p className="text-xs sm:text-sm font-medium text-slate-300 py-6 text-center">
                 Select a product from the form to view real-time balance calculations.
               </p>
             )}
@@ -324,9 +324,56 @@ export function StockOutPage() {
       </div>
 
       {/* Recent Adjustments Table */}
-      <div className="bg-white rounded-2xl border border-slate-200/90 p-6 shadow-xs">
+      <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-6 shadow-xs">
         <h2 className="text-base font-bold text-slate-900 mb-4">Recent Adjustments Log</h2>
-        <div className="overflow-x-auto">
+
+        {/* Mobile Cards (< md) */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {recentAdjustments.length === 0 ? (
+            <div className="py-8 text-center text-slate-600 font-semibold text-xs">
+              No adjustments recorded yet.
+            </div>
+          ) : (
+            recentAdjustments.map((tx) => (
+              <div key={tx.id} className="py-3 px-1 space-y-2">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 mb-0.5">
+                      <span
+                        className={`inline-flex items-center px-1.5 py-0.2 rounded-full text-[10px] font-bold ${
+                          tx.transactionType === 'ADJUSTMENT_IN'
+                            ? 'bg-emerald-100 text-emerald-800 border border-emerald-300'
+                            : 'bg-amber-100 text-amber-800 border border-amber-300'
+                        }`}
+                      >
+                        {tx.transactionType === 'ADJUSTMENT_IN' ? 'IN' : 'OUT'}
+                      </span>
+                      <h4 className="font-bold text-sm text-slate-900 truncate">{tx.productName}</h4>
+                    </div>
+                    <p className="text-xs font-mono text-slate-600 font-semibold">SKU: {tx.productSku}</p>
+                  </div>
+                  <div className="text-right shrink-0">
+                    <span
+                      className={`font-black text-sm font-mono block ${
+                        tx.quantity > 0 ? 'text-emerald-700' : 'text-rose-700'
+                      }`}
+                    >
+                      {tx.quantity > 0 ? `+${tx.quantity}` : tx.quantity} {tx.unit}
+                    </span>
+                    <span className="text-[11px] text-slate-600 font-medium">Bal: {tx.balanceAfter}</span>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between text-[11px] text-slate-600 pt-1 border-t border-slate-100">
+                  <span>{new Date(tx.createdAt).toLocaleDateString()} by {tx.userName}</span>
+                  {tx.reason && <span className="truncate max-w-[140px] font-medium">{tx.reason}</span>}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-sm text-slate-700">
             <thead className="bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
               <tr>

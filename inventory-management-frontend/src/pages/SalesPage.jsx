@@ -154,55 +154,128 @@ export function SalesPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Sales Orders & History</h1>
-          <p className="text-sm text-slate-700 font-medium">Review past transactions, reprint customer invoices, and process returns</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Sales Orders & History</h1>
+          <p className="text-xs sm:text-sm text-slate-700 font-medium">Review past transactions, reprint customer invoices, and process returns</p>
         </div>
       </div>
 
       {/* Filter Bar */}
-      <Card className="p-4 flex flex-col md:flex-row items-center gap-3">
+      <Card className="p-3 sm:p-4 flex flex-col md:flex-row items-stretch md:items-center gap-2.5 sm:gap-3">
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-slate-500 absolute left-3 top-3" />
+          <Search className="w-4 h-4 text-slate-500 absolute left-3 top-2.5 sm:top-3 pointer-events-none" />
           <input
             type="text"
             placeholder="Search by invoice number (e.g. INV-2026)..."
             value={invoiceNumber}
             onChange={(e) => { setInvoiceNumber(e.target.value); setPage(1); }}
-            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-medium text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full pl-9 pr-4 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-medium text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
 
-        <select
-          value={paymentMethod}
-          onChange={(e) => { setPaymentMethod(e.target.value); setPage(1); }}
-          className="w-full md:w-44 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900"
-        >
-          <option value="">All Payments</option>
-          <option value="CASH">Cash</option>
-          <option value="CARD">Card</option>
-          <option value="UPI">UPI</option>
-        </select>
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:flex items-center gap-2.5 sm:gap-3 w-full md:w-auto">
+          <select
+            value={paymentMethod}
+            onChange={(e) => { setPaymentMethod(e.target.value); setPage(1); }}
+            className="w-full md:w-40 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900"
+          >
+            <option value="">All Payments</option>
+            <option value="CASH">Cash</option>
+            <option value="CARD">Card</option>
+            <option value="UPI">UPI</option>
+          </select>
 
-        <input
-          type="date"
-          value={fromDate}
-          onChange={(e) => { setFromDate(e.target.value); setPage(1); }}
-          className="w-full md:w-40 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900"
-        />
+          <input
+            type="date"
+            value={fromDate}
+            onChange={(e) => { setFromDate(e.target.value); setPage(1); }}
+            className="w-full md:w-36 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900"
+          />
 
-        <input
-          type="date"
-          value={toDate}
-          onChange={(e) => { setToDate(e.target.value); setPage(1); }}
-          className="w-full md:w-40 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-sm font-semibold text-slate-900"
-        />
+          <input
+            type="date"
+            value={toDate}
+            onChange={(e) => { setToDate(e.target.value); setPage(1); }}
+            className="w-full md:w-36 px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900"
+          />
+        </div>
       </Card>
 
-      {/* Sales Table */}
+      {/* Sales Table & Mobile Cards */}
       <Card className="p-0 overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile Sales Cards (< md) */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {loading ? (
+            <div className="py-12 text-center text-slate-600 font-medium">Loading sales records...</div>
+          ) : sales.length === 0 ? (
+            <div className="py-12 text-center text-slate-600 font-medium px-4">No sales records found</div>
+          ) : (
+            sales.map((sale) => (
+              <div key={sale.id} className="p-3.5 space-y-2.5 hover:bg-slate-50/70 transition-colors">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <span className="font-mono font-bold text-emerald-800 text-sm block">{sale.invoiceNumber}</span>
+                    <span className="text-[11px] text-slate-600 font-mono">
+                      {new Date(sale.createdAt).toLocaleString()}
+                    </span>
+                  </div>
+                  <div>
+                    {getStatusBadge(sale.status)}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs py-2 px-3 bg-slate-50 rounded-xl border border-slate-200/70">
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-600 block">Customer</span>
+                    <span className="font-bold text-slate-900 truncate block">{sale.customerName}</span>
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-600 block">Payment</span>
+                    <span className="font-bold text-slate-800 block">{sale.paymentMethod}</span>
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-600 block">Cashier</span>
+                    <span className="text-slate-800 font-medium truncate block">{sale.cashierName}</span>
+                  </div>
+                  <div>
+                    <span className="text-[11px] font-bold text-slate-600 block">Total Amount</span>
+                    <span className="font-mono font-black text-emerald-900 text-sm block">
+                      ${sale.grandTotal.toFixed(2)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-1">
+                  <Button
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => handleOpenDetail(sale.id)}
+                    className="flex-1 font-semibold text-xs py-1.5"
+                  >
+                    <Eye className="w-3.5 h-3.5 mr-1" />
+                    View
+                  </Button>
+
+                  {sale.status !== 'RETURNED' && (
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      onClick={() => handleOpenReturn(sale.id)}
+                      className="flex-1 text-xs text-rose-700 font-bold hover:bg-rose-50 border-rose-200 py-1.5"
+                    >
+                      <RotateCcw className="w-3.5 h-3.5 mr-1" />
+                      Return
+                    </Button>
+                  )}
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Desktop Sales Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-slate-200 bg-slate-100 text-xs font-bold text-slate-800 uppercase tracking-wider">
@@ -280,9 +353,9 @@ export function SalesPage() {
         </div>
 
         {/* Pagination */}
-        <div className="px-4 py-3 border-t border-slate-200 flex items-center justify-between text-xs text-slate-700 font-medium">
+        <div className="px-3 sm:px-4 py-3 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-700 font-medium">
           <span>Showing {sales.length} of {meta.totalItems} transactions</span>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
             <Button
               variant="secondary"
               size="sm"
@@ -315,7 +388,7 @@ export function SalesPage() {
       >
         {selectedSale && (
           <div className="space-y-4 text-xs">
-            <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
               <div>
                 <span className="text-slate-600 font-bold block">Customer:</span>
                 <span className="font-bold text-slate-950">{selectedSale.customer?.name || 'Walk-in'}</span>
@@ -334,22 +407,24 @@ export function SalesPage() {
               </div>
             </div>
 
-            <div className="divide-y divide-slate-200 border border-slate-200 rounded-xl overflow-hidden">
-              <div className="grid grid-cols-4 p-2.5 bg-slate-100 font-bold text-slate-800">
-                <span className="col-span-2">Item</span>
-                <span className="text-center">Qty</span>
-                <span className="text-right">Total</span>
-              </div>
-              {selectedSale.items.map((it) => (
-                <div key={it.id} className="grid grid-cols-4 p-2.5 items-center">
-                  <div className="col-span-2">
-                    <p className="font-bold text-slate-950">{it.productName}</p>
-                    <span className="text-[10px] text-slate-600 font-mono font-semibold">${it.unitPrice.toFixed(2)} / {it.unit}</span>
-                  </div>
-                  <span className="text-center font-bold text-slate-900">{it.quantity}</span>
-                  <span className="text-right font-mono font-bold text-slate-950">${it.lineTotal.toFixed(2)}</span>
+            <div className="border border-slate-200 rounded-xl overflow-hidden overflow-x-auto">
+              <div className="min-w-[320px] divide-y divide-slate-200">
+                <div className="grid grid-cols-4 p-2.5 bg-slate-100 font-bold text-slate-800">
+                  <span className="col-span-2">Item</span>
+                  <span className="text-center">Qty</span>
+                  <span className="text-right">Total</span>
                 </div>
-              ))}
+                {selectedSale.items.map((it) => (
+                  <div key={it.id} className="grid grid-cols-4 p-2.5 items-center">
+                    <div className="col-span-2">
+                      <p className="font-bold text-slate-950">{it.productName}</p>
+                      <span className="text-[10px] text-slate-600 font-mono font-semibold">${it.unitPrice.toFixed(2)} / {it.unit}</span>
+                    </div>
+                    <span className="text-center font-bold text-slate-900">{it.quantity}</span>
+                    <span className="text-right font-mono font-bold text-slate-950">${it.lineTotal.toFixed(2)}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="p-3 bg-slate-50 rounded-xl space-y-1 font-mono text-right font-semibold text-slate-800 border border-slate-200">
@@ -361,15 +436,16 @@ export function SalesPage() {
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 pt-4 border-t border-slate-100">
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-4 border-t border-slate-100">
               <Button
                 variant="secondary"
                 onClick={() => window.print()}
+                className="w-full sm:w-auto font-semibold"
               >
                 <Printer className="w-4 h-4 mr-1" />
                 Print Invoice
               </Button>
-              <Button variant="secondary" onClick={() => setShowDetailModal(false)}>
+              <Button variant="secondary" onClick={() => setShowDetailModal(false)} className="w-full sm:w-auto font-semibold">
                 Close
               </Button>
             </div>
@@ -386,7 +462,7 @@ export function SalesPage() {
       >
         {selectedSale && (
           <form onSubmit={handleConfirmReturn} className="space-y-4 text-xs">
-            <div className="grid grid-cols-3 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200">
               <div>
                 <span className="text-slate-600 font-bold block">Invoice:</span>
                 <span className="font-bold text-emerald-800 font-mono text-sm">{selectedSale.invoiceNumber}</span>
@@ -405,72 +481,74 @@ export function SalesPage() {
               <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
                 Select Items to Return *
               </label>
-              <div className="border border-slate-200 rounded-xl overflow-hidden divide-y divide-slate-200">
-                <div className="grid grid-cols-12 p-2.5 bg-slate-100 font-bold text-slate-800 text-[11px] uppercase tracking-wider">
-                  <span className="col-span-5">Item</span>
-                  <span className="col-span-2 text-center">Purchased</span>
-                  <span className="col-span-2 text-center">Returnable</span>
-                  <span className="col-span-3 text-right">Return Qty</span>
-                </div>
-                {selectedSale.items.map((it) => {
-                  const returnable = it.returnableQuantity !== undefined ? it.returnableQuantity : it.quantity;
-                  const currentInput = returnInputs[it.id] ?? 0;
-                  const isFullyReturned = returnable <= 0;
+              <div className="border border-slate-200 rounded-xl overflow-hidden overflow-x-auto">
+                <div className="min-w-[440px] divide-y divide-slate-200">
+                  <div className="grid grid-cols-12 p-2.5 bg-slate-100 font-bold text-slate-800 text-[11px] uppercase tracking-wider">
+                    <span className="col-span-5">Item</span>
+                    <span className="col-span-2 text-center">Purchased</span>
+                    <span className="col-span-2 text-center">Returnable</span>
+                    <span className="col-span-3 text-right">Return Qty</span>
+                  </div>
+                  {selectedSale.items.map((it) => {
+                    const returnable = it.returnableQuantity !== undefined ? it.returnableQuantity : it.quantity;
+                    const currentInput = returnInputs[it.id] ?? 0;
+                    const isFullyReturned = returnable <= 0;
 
-                  return (
-                    <div key={it.id} className="grid grid-cols-12 p-3 items-center hover:bg-slate-50/70 transition-colors">
-                      <div className="col-span-5 pr-2">
-                        <p className="font-bold text-slate-900 text-sm leading-tight">{it.productName}</p>
-                        <span className="text-[10px] text-slate-600 font-mono font-semibold">
-                          ${it.unitPrice.toFixed(2)} / {it.unit} (SKU: {it.productSku})
-                        </span>
-                        {it.returnedQuantity > 0 && (
-                          <span className="block text-[10px] text-amber-700 font-bold">
-                            Previously returned: {it.returnedQuantity} {it.unit}
+                    return (
+                      <div key={it.id} className="grid grid-cols-12 p-3 items-center hover:bg-slate-50/70 transition-colors">
+                        <div className="col-span-5 pr-2">
+                          <p className="font-bold text-slate-900 text-sm leading-tight">{it.productName}</p>
+                          <span className="text-[10px] text-slate-600 font-mono font-semibold">
+                            ${it.unitPrice.toFixed(2)} / {it.unit} (SKU: {it.productSku})
                           </span>
-                        )}
+                          {it.returnedQuantity > 0 && (
+                            <span className="block text-[10px] text-amber-700 font-bold">
+                              Previously returned: {it.returnedQuantity} {it.unit}
+                            </span>
+                          )}
+                        </div>
+                        <div className="col-span-2 text-center font-bold text-slate-800 font-mono">
+                          {it.quantity} {it.unit}
+                        </div>
+                        <div className="col-span-2 text-center font-bold font-mono">
+                          {isFullyReturned ? (
+                            <span className="text-rose-700 text-[11px]">0 (Fully Returned)</span>
+                          ) : (
+                            <span className="text-emerald-700">{returnable} {it.unit}</span>
+                          )}
+                        </div>
+                        <div className="col-span-3 text-right">
+                          {isFullyReturned ? (
+                            <span className="text-slate-400 font-semibold italic text-xs">No items left</span>
+                          ) : (
+                            <div className="flex items-center justify-end gap-1.5">
+                              <input
+                                type="number"
+                                min="0"
+                                max={returnable}
+                                step="1"
+                                value={currentInput}
+                                onChange={(e) => {
+                                  const val = Math.max(0, Math.min(returnable, Number(e.target.value) || 0));
+                                  setReturnInputs({ ...returnInputs, [it.id]: val });
+                                }}
+                                className="w-16 px-2 py-1 bg-white border border-slate-300 rounded-lg text-center font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setReturnInputs({ ...returnInputs, [it.id]: returnable })}
+                                className="text-[10px] font-bold text-indigo-600 hover:underline px-1 py-0.5"
+                                title="Return max returnable units"
+                              >
+                                Max
+                              </button>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <div className="col-span-2 text-center font-bold text-slate-800 font-mono">
-                        {it.quantity} {it.unit}
-                      </div>
-                      <div className="col-span-2 text-center font-bold font-mono">
-                        {isFullyReturned ? (
-                          <span className="text-rose-700 text-[11px]">0 (Fully Returned)</span>
-                        ) : (
-                          <span className="text-emerald-700">{returnable} {it.unit}</span>
-                        )}
-                      </div>
-                      <div className="col-span-3 text-right">
-                        {isFullyReturned ? (
-                          <span className="text-slate-400 font-semibold italic text-xs">No items left</span>
-                        ) : (
-                          <div className="flex items-center justify-end gap-1.5">
-                            <input
-                              type="number"
-                              min="0"
-                              max={returnable}
-                              step="1"
-                              value={currentInput}
-                              onChange={(e) => {
-                                const val = Math.max(0, Math.min(returnable, Number(e.target.value) || 0));
-                                setReturnInputs({ ...returnInputs, [it.id]: val });
-                              }}
-                              className="w-16 px-2 py-1 bg-white border border-slate-300 rounded-lg text-center font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
-                            />
-                            <button
-                              type="button"
-                              onClick={() => setReturnInputs({ ...returnInputs, [it.id]: returnable })}
-                              className="text-[10px] font-bold text-indigo-600 hover:underline px-1 py-0.5"
-                              title="Return max returnable units"
-                            >
-                              Max
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
@@ -481,7 +559,7 @@ export function SalesPage() {
               <select
                 value={returnReason}
                 onChange={(e) => setReturnReason(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
+                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-600"
               >
                 <option value="Customer Changed Mind">Customer Changed Mind</option>
                 <option value="Defective / Damaged Item">Defective / Damaged Item</option>
@@ -493,26 +571,26 @@ export function SalesPage() {
             </div>
 
             {/* Refund Calculation Summary Box */}
-            <div className="p-4 bg-emerald-50 rounded-xl border border-emerald-300 flex items-center justify-between">
+            <div className="p-3 sm:p-4 bg-emerald-50 rounded-xl border border-emerald-300 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2">
               <div>
                 <span className="text-xs font-bold text-emerald-900 block">Total Units Being Returned:</span>
-                <span className="text-lg font-black font-mono text-emerald-950">{totalReturnQty} item(s)</span>
+                <span className="text-base sm:text-lg font-black font-mono text-emerald-950">{totalReturnQty} item(s)</span>
               </div>
-              <div className="text-right">
+              <div className="text-left sm:text-right">
                 <span className="text-xs font-bold text-emerald-900 block">Total Refund Due Customer:</span>
-                <span className="text-xl font-black font-mono text-emerald-950">${totalRefundAmount.toFixed(2)}</span>
+                <span className="text-lg sm:text-xl font-black font-mono text-emerald-950">${totalRefundAmount.toFixed(2)}</span>
               </div>
             </div>
 
-            <div className="flex justify-end gap-2 pt-4 border-t border-slate-100">
-              <Button variant="secondary" type="button" onClick={() => setShowReturnModal(false)}>
+            <div className="flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-end gap-2 pt-4 border-t border-slate-100">
+              <Button variant="secondary" type="button" onClick={() => setShowReturnModal(false)} className="w-full sm:w-auto font-semibold">
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={totalReturnQty <= 0}
                 loading={isSubmitting}
-                className="font-bold bg-rose-700 hover:bg-rose-800 text-white"
+                className="w-full sm:w-auto font-bold bg-rose-700 hover:bg-rose-800 text-white"
               >
                 Confirm Return & Restore Stock
               </Button>

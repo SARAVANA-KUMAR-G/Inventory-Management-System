@@ -67,13 +67,13 @@ export function TransactionsPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
-            <History className="w-7 h-7 text-indigo-600" />
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight flex items-center gap-2">
+            <History className="w-6 sm:w-7 h-6 sm:h-7 text-indigo-600" />
             Stock Ledger & Transactions
           </h1>
-          <p className="text-sm text-slate-700 font-medium mt-1">
+          <p className="text-xs sm:text-sm text-slate-700 font-medium mt-1">
             Complete, immutable audit trail of every stock change across receiving, sales, and adjustments.
           </p>
         </div>
@@ -81,7 +81,7 @@ export function TransactionsPage() {
         <Button
           variant="secondary"
           onClick={loadTransactions}
-          className="flex items-center gap-2 self-start sm:self-auto font-semibold"
+          className="flex items-center justify-center gap-2 w-full sm:w-auto font-semibold py-2"
         >
           <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
           Refresh
@@ -89,8 +89,8 @@ export function TransactionsPage() {
       </div>
 
       {/* Filter Bar */}
-      <div className="bg-white rounded-2xl border border-slate-200/80 p-4 shadow-xs flex flex-wrap items-end gap-3">
-        <div className="min-w-[180px] flex-1">
+      <div className="bg-white rounded-2xl border border-slate-200/80 p-3 sm:p-4 shadow-xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+        <div>
           <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
             Product
           </label>
@@ -100,7 +100,7 @@ export function TransactionsPage() {
               setSelectedProduct(e.target.value);
               setPage(1);
             }}
-            className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+            className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
           >
             <option value="">All Products</option>
             {products.map((p) => (
@@ -111,7 +111,7 @@ export function TransactionsPage() {
           </select>
         </div>
 
-        <div className="w-44">
+        <div>
           <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
             Transaction Type
           </label>
@@ -121,7 +121,7 @@ export function TransactionsPage() {
               setSelectedType(e.target.value);
               setPage(1);
             }}
-            className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+            className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
           >
             <option value="">All Types</option>
             <option value="STOCK_IN">Stock In (Receiving)</option>
@@ -131,7 +131,7 @@ export function TransactionsPage() {
           </select>
         </div>
 
-        <div className="w-36">
+        <div>
           <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
             From Date
           </label>
@@ -142,11 +142,11 @@ export function TransactionsPage() {
               setFromDate(e.target.value);
               setPage(1);
             }}
-            className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+            className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
           />
         </div>
 
-        <div className="w-36">
+        <div>
           <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1">
             To Date
           </label>
@@ -157,23 +157,86 @@ export function TransactionsPage() {
               setToDate(e.target.value);
               setPage(1);
             }}
-            className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
+            className="w-full px-3 py-2 bg-slate-50 border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold text-slate-900 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500"
           />
         </div>
 
         {(selectedProduct || selectedType || fromDate || toDate) && (
-          <button
-            onClick={resetFilters}
-            className="text-xs text-slate-700 hover:text-slate-900 font-bold py-2 px-3 hover:bg-slate-100 rounded-xl transition-colors"
-          >
-            Clear Filters
-          </button>
+          <div className="col-span-full flex justify-end">
+            <button
+              onClick={resetFilters}
+              className="text-xs text-rose-700 hover:text-rose-900 font-bold py-1 px-2.5 hover:bg-rose-50 rounded-lg transition-colors"
+            >
+              Clear Filters
+            </button>
+          </div>
         )}
       </div>
 
-      {/* Ledger Table */}
+      {/* Ledger Table & Mobile Cards */}
       <div className="bg-white rounded-2xl border border-slate-200/80 shadow-xs overflow-hidden">
-        <div className="overflow-x-auto">
+        {/* Mobile Ledger Cards (< md) */}
+        <div className="md:hidden divide-y divide-slate-100">
+          {loading ? (
+            <div className="py-12 text-center text-slate-600 font-medium">
+              <div className="flex items-center justify-center gap-2">
+                <RefreshCw className="w-4 h-4 animate-spin text-indigo-500" />
+                <span>Loading ledger records...</span>
+              </div>
+            </div>
+          ) : transactions.length === 0 ? (
+            <div className="py-12 text-center text-slate-600 font-medium text-xs px-4">
+              No transactions match the selected filters.
+            </div>
+          ) : (
+            transactions.map((tx) => {
+              let badgeStyle = 'bg-slate-100 text-slate-800 border-slate-300 font-bold';
+              if (tx.transactionType === 'STOCK_IN') {
+                badgeStyle = 'bg-emerald-50 text-emerald-800 border-emerald-300 font-bold';
+              } else if (tx.transactionType === 'SALE') {
+                badgeStyle = 'bg-sky-50 text-sky-800 border-sky-300 font-bold';
+              } else if (tx.transactionType === 'ADJUSTMENT_IN') {
+                badgeStyle = 'bg-teal-50 text-teal-800 border-teal-300 font-bold';
+              } else if (tx.transactionType === 'ADJUSTMENT_OUT') {
+                badgeStyle = 'bg-amber-50 text-amber-800 border-amber-300 font-bold';
+              }
+
+              const isPositive = Number(tx.quantity) > 0;
+
+              return (
+                <div key={tx.id} className="p-3.5 space-y-2 hover:bg-slate-50/80 transition-colors">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-1.5 mb-1">
+                        <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] border ${badgeStyle}`}>
+                          {tx.transactionType}
+                        </span>
+                        <span className="text-[11px] text-slate-600 font-mono font-medium">
+                          {new Date(tx.createdAt).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <h4 className="font-bold text-sm text-slate-900 leading-tight">{tx.productName}</h4>
+                      <p className="text-xs font-mono text-slate-600 font-medium">SKU: {tx.productSku}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <span className={`font-black text-sm font-mono block ${isPositive ? 'text-emerald-700' : 'text-rose-700'}`}>
+                        {isPositive ? `+${tx.quantity}` : tx.quantity} {tx.unit}
+                      </span>
+                      <span className="text-[11px] text-slate-600 font-medium">Bal: {tx.balanceAfter}</span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-[11px] text-slate-600 pt-1.5 border-t border-slate-100">
+                    <span>By: <strong className="text-slate-800">{tx.userName}</strong></span>
+                    {tx.reason && <span className="truncate max-w-[140px] font-medium">{tx.reason}</span>}
+                  </div>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Desktop Table (>= md) */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left text-sm text-slate-800">
             <thead className="bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider border-b border-slate-200">
               <tr>
@@ -256,8 +319,8 @@ export function TransactionsPage() {
 
         {/* Pagination Bar */}
         {meta.totalPages > 1 && (
-          <div className="p-4 border-t border-slate-200 flex items-center justify-between">
-            <span className="text-xs text-slate-700 font-medium">
+          <div className="p-3 sm:p-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between gap-2.5">
+            <span className="text-xs text-slate-700 font-medium text-center sm:text-left">
               Showing page <span className="font-bold text-slate-900">{meta.page}</span> of{' '}
               <span className="font-bold text-slate-900">{meta.totalPages}</span> ({meta.totalItems} total transactions)
             </span>
