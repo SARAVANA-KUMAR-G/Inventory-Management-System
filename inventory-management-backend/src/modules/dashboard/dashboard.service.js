@@ -104,7 +104,7 @@ async function getDashboardSummary() {
     recentSales: recentSales.map((s) => ({
       id: s.id,
       invoiceNumber: s.invoiceNumber,
-      cashierName: `${s.user.firstName} ${s.user.lastName || ''}`.trim(),
+      cashierName: s.user ? `${s.user.firstName} ${s.user.lastName || ''}`.trim() || 'Deleted User' : 'Deleted User',
       customerName: 'Walk-in',
       itemCount: s.items.length,
       totalAmount: Number(s.grandTotal),
@@ -119,7 +119,7 @@ async function getDashboardSummary() {
       transactionType: t.transactionType,
       quantity: Number(t.quantity),
       balanceAfter: Number(t.balanceAfter),
-      userName: `${t.user.firstName} ${t.user.lastName || ''}`.trim(),
+      userName: t.user ? `${t.user.firstName} ${t.user.lastName || ''}`.trim() || 'Deleted User' : 'Deleted User',
       reason: t.reason,
       createdAt: t.createdAt
     }))
@@ -216,7 +216,7 @@ async function getRecentActivity(limit = 10) {
     productSku: t.product.sku,
     quantity: Number(t.quantity),
     balanceAfter: Number(t.balanceAfter),
-    userName: `${t.user.firstName} ${t.user.lastName || ''}`.trim(),
+    userName: t.user ? `${t.user.firstName} ${t.user.lastName || ''}`.trim() || 'Deleted User' : 'Deleted User',
     createdAt: t.createdAt
   }));
 }

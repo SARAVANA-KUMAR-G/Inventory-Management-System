@@ -12,6 +12,9 @@ export function UsersPage() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState('');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -20,6 +23,12 @@ export function UsersPage() {
     role: 'STAFF'
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const isDeletedUser = (u) =>
+    Boolean(
+      u.isDeleted ||
+      (u.email && u.email.endsWith('@system.local') && u.firstName === 'Deleted')
+    );
 
   const loadUsers = async () => {
     setLoading(true);
@@ -59,6 +68,7 @@ export function UsersPage() {
   };
 
   const handleToggleAccess = async (targetUser) => {
+    if (isDeletedUser(targetUser)) return;
     const action = targetUser.isActive ? 'deactivate' : 'activate';
     if (
       !window.confirm(
@@ -79,6 +89,21 @@ export function UsersPage() {
       loadUsers();
     } catch (err) {
       alert(err.message || `Failed to ${action} user`);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) return;
+    setIsDeleting(true);
+    setDeleteError('');
+    try {
+      await apiClient.delete(`/users/${userToDelete.id}`);
+      setUserToDelete(null);
+      await loadUsers();
+    } catch (err) {
+      setDeleteError(err.message || 'Failed to delete user');
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -125,77 +150,105 @@ export function UsersPage() {
               No users found.
             </div>
           ) : (
-            users.map((u) => (
-              <div key={u.id} className="p-3.5 space-y-2.5 hover:bg-slate-50/70 transition-colors">
-                <div className="flex items-start justify-between gap-2">
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <p className="font-bold text-sm text-slate-900 leading-tight">
-                        {u.firstName} {u.lastName || ''}
-                      </p>
-                      {!u.isActive && (
-                        <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-rose-100 text-rose-800 border border-rose-300">
-                          Restricted
-                        </span>
-                      )}
+            users.map((u) => {
+              const isTombstoned = isDeletedUser(u);
+              return (
+                <div key={u.id} className="p-3.5 space-y-2.5 hover:bg-slate-50/70 transition-colors">
+                  <div className="flex items-start justify-between gap-2">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <p className="font-bold text-sm text-slate-900 leading-tight">
+                          {isTombstoned ? 'Deleted User' : `${u.firstName} ${u.lastName || ''}`}
+                        </p>
+                        {!u.isActive && !isTombstoned && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-rose-100 text-rose-800 border border-rose-300">
+                            Restricted
+                          </span>
+                        )}
+                        {isTombstoned && (
+                          <span className="text-[10px] font-bold px-1.5 py-0.2 rounded bg-slate-100 text-slate-700 border border-slate-300">
+                            Deleted
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-xs text-slate-600 font-mono font-medium block truncate mt-0.5">
+                        {isTombstoned ? '—' : u.email}
+                      </span>
                     </div>
-                    <span className="text-xs text-slate-600 font-mono font-medium block truncate mt-0.5">
-                      {u.email}
+
+                    <span
+                      className={`shrink-0 inline-flex items-center text-xs font-bold rounded-lg px-2.5 py-0.5 border ${
+                        u.role === 'ADMIN'
+                          ? 'bg-purple-50 text-purple-800 border-purple-300'
+                          : 'bg-emerald-50 text-emerald-800 border-emerald-300'
+                      }`}
+                    >
+                      {u.role}
                     </span>
                   </div>
 
-                  <span
-                    className={`shrink-0 inline-flex items-center text-xs font-bold rounded-lg px-2.5 py-0.5 border ${
-                      u.role === 'ADMIN'
-                        ? 'bg-purple-50 text-purple-800 border-purple-300'
-                        : 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                    }`}
-                  >
-                    {u.role}
-                  </span>
-                </div>
+                  <div className="flex items-center justify-between text-xs py-1.5 px-2.5 bg-slate-50 rounded-xl border border-slate-200/70">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-slate-600 font-medium">Status:</span>
+                      {isTombstoned ? (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-slate-700">
+                          <span className="w-1.5 h-1.5 rounded-full bg-slate-400" />
+                          Deleted
+                        </span>
+                      ) : u.isActive ? (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                          Active
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-800">
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
+                          Disabled
+                        </span>
+                      )}
+                    </div>
 
-                <div className="flex items-center justify-between text-xs py-1.5 px-2.5 bg-slate-50 rounded-xl border border-slate-200/70">
-                  <div className="flex items-center gap-1.5">
-                    <span className="text-slate-600 font-medium">Status:</span>
-                    {u.isActive ? (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-800">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                        Active
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-[11px] font-bold text-rose-800">
-                        <span className="w-1.5 h-1.5 rounded-full bg-rose-400" />
-                        Disabled
-                      </span>
-                    )}
+                    <span className="text-slate-600 text-[11px] font-mono">
+                      Joined: {new Date(u.createdAt).toLocaleDateString()}
+                    </span>
                   </div>
 
-                  <span className="text-slate-600 text-[11px] font-mono">
-                    Joined: {new Date(u.createdAt).toLocaleDateString()}
-                  </span>
+                  <div className="flex items-center justify-end pt-1">
+                    {isTombstoned ? (
+                      <span className="text-xs text-slate-500 font-medium italic">—</span>
+                    ) : currentUser?.id === u.id ? (
+                      <span className="text-xs text-slate-500 font-semibold italic">Current User</span>
+                    ) : (
+                      <div className="grid grid-cols-2 gap-2 w-full">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => handleToggleAccess(u)}
+                          className={`font-bold text-xs py-1.5 ${
+                            u.isActive
+                              ? 'text-rose-700 hover:bg-rose-50 border-rose-200'
+                              : 'text-emerald-700 hover:bg-emerald-50 border-emerald-200'
+                          }`}
+                        >
+                          {u.isActive ? 'Deactivate User' : 'Activate User'}
+                        </Button>
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => {
+                            setDeleteError('');
+                            setUserToDelete(u);
+                          }}
+                          className="font-bold text-xs py-1.5 text-rose-700 hover:bg-rose-50 border-rose-200"
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
-
-                <div className="flex items-center justify-end pt-1">
-                  {currentUser?.id === u.id ? (
-                    <span className="text-xs text-slate-500 font-semibold italic">Current User</span>
-                  ) : (
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => handleToggleAccess(u)}
-                      className={`w-full font-bold text-xs py-1.5 ${
-                        u.isActive
-                          ? 'text-rose-700 hover:bg-rose-50 border-rose-200'
-                          : 'text-emerald-700 hover:bg-emerald-50 border-emerald-200'
-                      }`}
-                    >
-                      {u.isActive ? 'Deactivate User' : 'Activate User'}
-                    </Button>
-                  )}
-                </div>
-              </div>
-            ))
+              );
+            })
           )}
         </div>
 
@@ -225,66 +278,94 @@ export function UsersPage() {
                   </td>
                 </tr>
               ) : (
-                users.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-50/70 transition-colors">
-                    <td className="py-3.5 px-4">
-                      <div className="flex items-center gap-2">
-                        <p className="font-bold text-slate-900 leading-tight">
-                          {u.firstName} {u.lastName || ''}
-                        </p>
-                        {!u.isActive && (
-                          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-300">
-                            Access Restricted
-                          </span>
-                        )}
-                      </div>
-                      <span className="text-xs text-slate-600 font-mono font-medium">{u.email}</span>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      <span
-                        className={`inline-flex items-center text-xs font-bold rounded-lg px-2.5 py-1 border ${
-                          u.role === 'ADMIN'
-                            ? 'bg-purple-50 text-purple-800 border-purple-300'
-                            : 'bg-emerald-50 text-emerald-800 border-emerald-300'
-                        }`}
-                      >
-                        {u.role}
-                      </span>
-                    </td>
-                    <td className="py-3.5 px-4">
-                      {u.isActive ? (
-                        <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full border bg-emerald-50 text-emerald-800 border-emerald-300">
-                          <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                          Active
+                users.map((u) => {
+                  const isTombstoned = isDeletedUser(u);
+                  return (
+                    <tr key={u.id} className="hover:bg-slate-50/70 transition-colors">
+                      <td className="py-3.5 px-4">
+                        <div className="flex items-center gap-2">
+                          <p className="font-bold text-slate-900 leading-tight">
+                            {isTombstoned ? 'Deleted User' : `${u.firstName} ${u.lastName || ''}`}
+                          </p>
+                          {!u.isActive && !isTombstoned && (
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-rose-100 text-rose-800 border border-rose-300">
+                              Access Restricted
+                            </span>
+                          )}
+                          {isTombstoned && (
+                            <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 text-slate-700 border border-slate-300">
+                              Deleted
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-xs text-slate-600 font-mono font-medium">
+                          {isTombstoned ? '—' : u.email}
                         </span>
-                      ) : (
-                        <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full border bg-rose-50 text-rose-800 border-rose-300">
-                          <span className="w-2 h-2 rounded-full bg-rose-400" />
-                          Disabled
-                        </span>
-                      )}
-                    </td>
-                    <td className="py-3.5 px-4 text-xs font-mono font-medium text-slate-700">
-                      {new Date(u.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="py-3.5 px-4 text-right">
-                      {currentUser?.id === u.id ? (
-                        <span className="text-xs text-slate-500 font-semibold italic">Current User</span>
-                      ) : (
-                        <button
-                          onClick={() => handleToggleAccess(u)}
-                          className={`text-xs font-bold transition-colors hover:underline ${
-                            u.isActive
-                              ? 'text-rose-700 hover:text-rose-900'
-                              : 'text-emerald-700 hover:text-emerald-900'
+                      </td>
+                      <td className="py-3.5 px-4">
+                        <span
+                          className={`inline-flex items-center text-xs font-bold rounded-lg px-2.5 py-1 border ${
+                            u.role === 'ADMIN'
+                              ? 'bg-purple-50 text-purple-800 border-purple-300'
+                              : 'bg-emerald-50 text-emerald-800 border-emerald-300'
                           }`}
                         >
-                          {u.isActive ? 'Deactivate' : 'Activate'}
-                        </button>
-                      )}
-                    </td>
-                  </tr>
-                ))
+                          {u.role}
+                        </span>
+                      </td>
+                      <td className="py-3.5 px-4">
+                        {isTombstoned ? (
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full border bg-slate-100 text-slate-700 border-slate-300">
+                            <span className="w-2 h-2 rounded-full bg-slate-400" />
+                            Deleted
+                          </span>
+                        ) : u.isActive ? (
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full border bg-emerald-50 text-emerald-800 border-emerald-300">
+                            <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                            Active
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center gap-1.5 text-xs font-bold px-2.5 py-1 rounded-full border bg-rose-50 text-rose-800 border-rose-300">
+                            <span className="w-2 h-2 rounded-full bg-rose-400" />
+                            Disabled
+                          </span>
+                        )}
+                      </td>
+                      <td className="py-3.5 px-4 text-xs font-mono font-medium text-slate-700">
+                        {new Date(u.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="py-3.5 px-4 text-right">
+                        {isTombstoned ? (
+                          <span className="text-xs text-slate-500 font-medium italic">—</span>
+                        ) : currentUser?.id === u.id ? (
+                          <span className="text-xs text-slate-500 font-semibold italic">Current User</span>
+                        ) : (
+                          <div className="flex items-center justify-end gap-3">
+                            <button
+                              onClick={() => handleToggleAccess(u)}
+                              className={`text-xs font-bold transition-colors hover:underline ${
+                                u.isActive
+                                  ? 'text-rose-700 hover:text-rose-900'
+                                  : 'text-emerald-700 hover:text-emerald-900'
+                              }`}
+                            >
+                              {u.isActive ? 'Deactivate' : 'Activate'}
+                            </button>
+                            <button
+                              onClick={() => {
+                                setDeleteError('');
+                                setUserToDelete(u);
+                              }}
+                              className="text-xs font-bold text-rose-600 hover:text-rose-900 transition-colors hover:underline"
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
@@ -360,6 +441,65 @@ export function UsersPage() {
             </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Delete User Confirmation Modal */}
+      <Modal
+        isOpen={Boolean(userToDelete)}
+        onClose={() => {
+          if (!isDeleting) {
+            setUserToDelete(null);
+            setDeleteError('');
+          }
+        }}
+        title="Delete User?"
+      >
+        <div className="space-y-4">
+          <p className="text-sm text-slate-700 leading-relaxed">
+            Are you sure you want to permanently remove this user's identity (
+            <strong className="text-slate-900 font-bold">
+              {userToDelete?.firstName} {userToDelete?.lastName || ''}
+            </strong>
+            {userToDelete?.email ? ` — ${userToDelete.email}` : ''})?
+          </p>
+
+          <div className="p-3.5 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-900 space-y-1">
+            <p className="font-bold">Historical Business Data Protection:</p>
+            <p className="text-amber-800">
+              Historical sales and inventory transactions will be preserved as{' '}
+              <strong className="font-bold text-amber-900">"Deleted User"</strong>. All invoices, items, quantities, and balances remain intact.
+            </p>
+          </div>
+
+          {deleteError && (
+            <div className="p-3 rounded-xl bg-rose-50 border border-rose-200 text-xs font-semibold text-rose-800">
+              {deleteError}
+            </div>
+          )}
+
+          <div className="flex flex-col-reverse sm:flex-row gap-2.5 sm:gap-3 pt-2">
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => {
+                setUserToDelete(null);
+                setDeleteError('');
+              }}
+              disabled={isDeleting}
+              className="w-full sm:flex-1 font-semibold"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={handleConfirmDelete}
+              loading={isDeleting}
+              className="w-full sm:flex-1 font-bold bg-rose-600 hover:bg-rose-700 text-white border-rose-600 shadow-xs"
+            >
+              Delete User
+            </Button>
+          </div>
+        </div>
       </Modal>
     </div>
   );

@@ -44,9 +44,22 @@ async function deactivateUser(req, res, next) {
   }
 }
 
+async function deleteUser(req, res, next) {
+  try {
+    const result = await userService.deleteUser(req.params.id, req.user);
+    if (result.isHardDeleted) {
+      return sendSuccess(res, { message: result.message });
+    }
+    return sendSuccess(res, result.user, { message: result.message });
+  } catch (error) {
+    next(error);
+  }
+}
+
 module.exports = {
   listUsers,
   createUser,
   updateUser,
-  deactivateUser
+  deactivateUser,
+  deleteUser
 };

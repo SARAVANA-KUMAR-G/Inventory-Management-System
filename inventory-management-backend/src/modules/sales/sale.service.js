@@ -117,7 +117,7 @@ async function listSales({
       totalUnits: totalSaleUnits,
       returnedUnits,
       itemCount: s.items.length,
-      cashierName: `${s.user.firstName} ${s.user.lastName || ''}`.trim(),
+      cashierName: s.user ? `${s.user.firstName} ${s.user.lastName || ''}`.trim() || 'Deleted User' : 'Deleted User',
       cashierId: s.userId,
       items: s.items.map((i) => ({
         id: i.id,
@@ -228,7 +228,7 @@ async function getSaleById(id) {
     status,
     totalSaleUnits,
     totalReturnedUnits,
-    cashierName: `${sale.user.firstName} ${sale.user.lastName || ''}`.trim(),
+    cashierName: sale.user ? `${sale.user.firstName} ${sale.user.lastName || ''}`.trim() || 'Deleted User' : 'Deleted User',
     cashierId: sale.userId,
     createdAt: sale.createdAt,
     items
@@ -362,7 +362,7 @@ async function createSale(data, cashierId) {
       grandTotal: Number(sale.grandTotal),
       totalAmount: Number(sale.grandTotal),
       paymentMethod: sale.paymentMethod,
-      cashierName: `${sale.user.firstName} ${sale.user.lastName || ''}`.trim(),
+      cashierName: sale.user ? `${sale.user.firstName} ${sale.user.lastName || ''}`.trim() || 'Deleted User' : 'Deleted User',
       items: sale.items.map((i) => ({
         id: i.id,
         productId: i.productId,

@@ -197,7 +197,7 @@ async function listStockTransactions({
     quantity: Number(t.quantity),
     balanceAfter: Number(t.balanceAfter),
     reason: t.reason,
-    userName: `${t.user.firstName} ${t.user.lastName || ''}`.trim(),
+    userName: t.user ? `${t.user.firstName} ${t.user.lastName || ''}`.trim() || 'Deleted User' : 'Deleted User',
     createdAt: t.createdAt
   }));
 

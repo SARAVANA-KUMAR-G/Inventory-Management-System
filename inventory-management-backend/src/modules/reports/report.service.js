@@ -76,7 +76,7 @@ async function getStockMovementReport({ productId = '', transactionType = '', fr
     transactionType: t.transactionType,
     quantity: Number(t.quantity),
     balanceAfter: Number(t.balanceAfter),
-    userName: `${t.user.firstName} ${t.user.lastName || ''}`.trim(),
+    userName: t.user ? `${t.user.firstName} ${t.user.lastName || ''}`.trim() || 'Deleted User' : 'Deleted User',
     reason: t.reason
   }));
 }
@@ -134,7 +134,7 @@ async function getSalesReport({ fromDate = '', toDate = '', paymentMethod = '' }
       invoiceNumber: s.invoiceNumber,
       date: s.createdAt,
       customerName: 'Walk-in',
-      cashierName: `${s.user.firstName} ${s.user.lastName || ''}`.trim(),
+      cashierName: s.user ? `${s.user.firstName} ${s.user.lastName || ''}`.trim() || 'Deleted User' : 'Deleted User',
       paymentMethod: s.paymentMethod,
       itemCount: s.items.length,
       subtotal,
