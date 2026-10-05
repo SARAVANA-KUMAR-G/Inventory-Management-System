@@ -233,10 +233,10 @@ export function ReportsPage() {
                       {r.currentStock} {r.unit}
                     </td>
                     <td className="py-3 px-4 text-right font-mono font-medium text-slate-700">{r.reorderLevel}</td>
-                    <td className="py-3 px-4 text-right font-mono font-semibold text-slate-800">${r.costPrice.toFixed(2)}</td>
-                    <td className="py-3 px-4 text-right font-mono font-semibold text-slate-800">${r.sellingPrice.toFixed(2)}</td>
+                    <td className="py-3 px-4 text-right font-mono font-semibold text-slate-800">₹{r.costPrice.toFixed(2)}</td>
+                    <td className="py-3 px-4 text-right font-mono font-semibold text-slate-800">₹{r.sellingPrice.toFixed(2)}</td>
                     <td className="py-3 px-4 text-right font-mono font-bold text-slate-950">
-                      ${r.totalCostValue.toFixed(2)}
+                      ₹{r.totalCostValue.toFixed(2)}
                     </td>
                     <td className="py-3 px-4 text-center">
                       <span
@@ -330,19 +330,19 @@ export function ReportsPage() {
               <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
                 <span className="text-[11px] sm:text-xs text-slate-700 font-bold uppercase">Total Revenue</span>
                 <span className="text-xl sm:text-2xl font-black text-emerald-700 font-mono block mt-1">
-                  ${(salesReport.summary.totalRevenue || 0).toFixed(2)}
+                  ₹{(salesReport.summary.totalRevenue || 0).toFixed(2)}
                 </span>
               </div>
               <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
                 <span className="text-[11px] sm:text-xs text-slate-700 font-bold uppercase">Total COGS</span>
                 <span className="text-xl sm:text-2xl font-black text-slate-800 font-mono block mt-1">
-                  ${(salesReport.summary.totalCOGS || 0).toFixed(2)}
+                  ₹{(salesReport.summary.totalCOGS || 0).toFixed(2)}
                 </span>
               </div>
               <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200/80 shadow-xs">
                 <span className="text-[11px] sm:text-xs text-slate-700 font-bold uppercase">Gross Profit</span>
                 <span className="text-xl sm:text-2xl font-black text-indigo-700 font-mono block mt-1">
-                  ${(salesReport.summary.grossProfit || 0).toFixed(2)}
+                  ₹{(salesReport.summary.grossProfit || 0).toFixed(2)}
                 </span>
               </div>
             </div>
@@ -387,18 +387,18 @@ export function ReportsPage() {
                           </span>
                         </td>
                         <td className="py-3 px-4 text-right font-mono font-semibold text-slate-800">{s.itemCount}</td>
-                        <td className="py-3 px-4 text-right font-mono font-semibold text-slate-800">${s.subtotal.toFixed(2)}</td>
+                        <td className="py-3 px-4 text-right font-mono font-semibold text-slate-800">₹{s.subtotal.toFixed(2)}</td>
                         <td className="py-3 px-4 text-right font-mono font-medium text-slate-700">
-                          {s.discount > 0 ? `-$${s.discount.toFixed(2)}` : '-'}
+                          {s.discount > 0 ? `-₹${s.discount.toFixed(2)}` : '-'}
                         </td>
                         <td className="py-3 px-4 text-right font-mono font-medium text-slate-700">
-                          {s.tax > 0 ? `+$${s.tax.toFixed(2)}` : '-'}
+                          {s.tax > 0 ? `+₹${s.tax.toFixed(2)}` : '-'}
                         </td>
                         <td className="py-3 px-4 text-right font-mono font-black text-slate-950">
-                          ${s.totalAmount.toFixed(2)}
+                          ₹{s.totalAmount.toFixed(2)}
                         </td>
                         <td className="py-3 px-4 text-right font-mono font-bold text-emerald-700">
-                          ${s.profit.toFixed(2)}
+                          ₹{s.profit.toFixed(2)}
                         </td>
                       </tr>
                     ))

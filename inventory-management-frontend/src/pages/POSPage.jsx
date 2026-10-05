@@ -263,7 +263,7 @@ export function POSPage() {
           }`}
         >
           <ShoppingCart className="w-3.5 h-3.5" />
-          <span>Cart ({cart.reduce((s, i) => s + i.quantity, 0)}) • ${grandTotal.toFixed(2)}</span>
+          <span>Cart ({cart.reduce((s, i) => s + i.quantity, 0)}) • ₹{grandTotal.toFixed(2)}</span>
         </button>
       </div>
 
@@ -332,7 +332,7 @@ export function POSPage() {
 
                 <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
                   <span className="text-base font-bold text-slate-900">
-                    ${Number(p.sellingPrice).toFixed(2)}
+                    ₹{Number(p.sellingPrice).toFixed(2)}
                   </span>
                   {inCart ? (
                     <span className="w-6 h-6 rounded-full bg-emerald-600 text-white font-bold text-xs flex items-center justify-center">
@@ -432,7 +432,7 @@ export function POSPage() {
               <div key={item.productId} className="py-2.5 px-3 flex items-center justify-between hover:bg-slate-50/50 rounded-lg">
                 <div className="min-w-0 flex-1 pr-2">
                   <p className="text-xs font-bold text-slate-900 truncate">{item.name}</p>
-                  <span className="text-[11px] text-slate-700 font-semibold">${item.price.toFixed(2)} / {item.unit}</span>
+                  <span className="text-[11px] text-slate-700 font-semibold">₹{item.price.toFixed(2)} / {item.unit}</span>
                 </div>
 
                 <div className="flex items-center gap-2 shrink-0">
@@ -455,7 +455,7 @@ export function POSPage() {
                   </div>
 
                   <span className="text-xs font-bold text-slate-900 w-16 text-right font-mono">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    ₹{(item.price * item.quantity).toFixed(2)}
                   </span>
 
                   <button
@@ -484,7 +484,7 @@ export function POSPage() {
                 className="py-1 px-1.5 text-xs font-semibold text-slate-900 bg-white border border-slate-300 rounded-md focus:outline-none"
               >
                 <option value="PERCENTAGE">%</option>
-                <option value="FIXED">$</option>
+                <option value="FIXED">₹</option>
               </select>
               <input
                 type="number"
@@ -501,21 +501,21 @@ export function POSPage() {
           <div className="space-y-1.5 text-xs">
             <div className="flex justify-between text-slate-700 font-semibold">
               <span>Subtotal</span>
-              <span className="font-mono font-bold text-slate-900">${subtotal.toFixed(2)}</span>
+              <span className="font-mono font-bold text-slate-900">₹{subtotal.toFixed(2)}</span>
             </div>
             {discountAmount > 0 && (
               <div className="flex justify-between text-emerald-700 font-bold">
                 <span>Discount</span>
-                <span className="font-mono">-${discountAmount.toFixed(2)}</span>
+                <span className="font-mono">-₹{discountAmount.toFixed(2)}</span>
               </div>
             )}
             <div className="flex justify-between text-slate-700 font-semibold">
               <span>Tax ({taxRate}%)</span>
-              <span className="font-mono font-bold text-slate-900">${taxAmount.toFixed(2)}</span>
+              <span className="font-mono font-bold text-slate-900">₹{taxAmount.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-base font-extrabold text-slate-900 pt-2 border-t border-slate-200">
               <span>Grand Total</span>
-              <span className="text-emerald-700 font-mono">${grandTotal.toFixed(2)}</span>
+              <span className="text-emerald-700 font-mono">₹{grandTotal.toFixed(2)}</span>
             </div>
           </div>
 
@@ -540,7 +540,7 @@ export function POSPage() {
         <div className="space-y-4">
           <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-center">
             <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Total Amount Due</span>
-            <h2 className="text-3xl font-black text-emerald-900 mt-1">${grandTotal.toFixed(2)}</h2>
+            <h2 className="text-3xl font-black text-emerald-900 mt-1">₹{grandTotal.toFixed(2)}</h2>
           </div>
 
           <div>
@@ -590,7 +590,7 @@ export function POSPage() {
           {paymentMethod === 'CASH' && (
             <div className="space-y-3 pt-2">
               <Input
-                label="Cash Tendered ($)"
+                label="Cash Tendered (₹)"
                 type="number"
                 step="0.01"
                 placeholder={grandTotal.toFixed(2)}
@@ -600,7 +600,7 @@ export function POSPage() {
               />
               <div className="flex justify-between p-3 bg-slate-100 rounded-xl text-sm font-semibold border border-slate-200">
                 <span className="text-slate-800 font-bold">Change to Return:</span>
-                <span className="text-slate-950 font-black font-mono text-base">${changeDue.toFixed(2)}</span>
+                <span className="text-slate-950 font-black font-mono text-base">₹{changeDue.toFixed(2)}</span>
               </div>
             </div>
           )}
@@ -665,9 +665,9 @@ export function POSPage() {
                   <div key={it.id} className="py-1.5 flex justify-between text-slate-900">
                     <div>
                       <p className="font-bold text-slate-950">{it.productName}</p>
-                      <span className="text-[10px] text-slate-700 font-semibold">{it.quantity} x ${it.unitPrice.toFixed(2)}</span>
+                      <span className="text-[10px] text-slate-700 font-semibold">{it.quantity} x ₹{it.unitPrice.toFixed(2)}</span>
                     </div>
-                    <span className="font-bold">${it.lineTotal.toFixed(2)}</span>
+                    <span className="font-bold">₹{it.lineTotal.toFixed(2)}</span>
                   </div>
                 ))}
               </div>
@@ -675,21 +675,21 @@ export function POSPage() {
               <div className="border-t border-dashed border-slate-400 pt-2 space-y-1 text-slate-900 font-semibold">
                 <div className="flex justify-between">
                   <span className="text-slate-700">SUBTOTAL:</span>
-                  <span>${completedSale.subtotal.toFixed(2)}</span>
+                  <span>₹{completedSale.subtotal.toFixed(2)}</span>
                 </div>
                 {completedSale.discountAmount > 0 && (
                   <div className="flex justify-between text-emerald-800 font-bold">
                     <span>DISCOUNT:</span>
-                    <span>-${completedSale.discountAmount.toFixed(2)}</span>
+                    <span>-₹{completedSale.discountAmount.toFixed(2)}</span>
                   </div>
                 )}
                 <div className="flex justify-between">
                   <span className="text-slate-700">TAX:</span>
-                  <span>${completedSale.taxAmount.toFixed(2)}</span>
+                  <span>₹{completedSale.taxAmount.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm font-black text-slate-950 pt-1 border-t border-slate-300">
                   <span>TOTAL:</span>
-                  <span>${completedSale.grandTotal.toFixed(2)}</span>
+                  <span>₹{completedSale.grandTotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between pt-1">
                   <span className="text-slate-700">PAYMENT METHOD:</span>
@@ -739,7 +739,7 @@ export function POSPage() {
               <span className="text-sm">View Order & Checkout</span>
             </div>
             <div className="flex items-center gap-1.5 text-emerald-400 font-mono text-base">
-              <span>${grandTotal.toFixed(2)}</span>
+              <span>₹{grandTotal.toFixed(2)}</span>
               <ArrowRight className="w-4 h-4" />
             </div>
           </button>

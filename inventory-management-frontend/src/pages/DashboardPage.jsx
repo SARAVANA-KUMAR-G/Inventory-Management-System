@@ -95,7 +95,7 @@ export function DashboardPage() {
     labels: salesTrend.map((d) => d.date),
     datasets: [
       {
-        label: 'Revenue ($)',
+        label: 'Revenue (₹)',
         data: salesTrend.map((d) => d.revenue),
         borderColor: '#059669',
         backgroundColor: 'rgba(5, 150, 105, 0.15)',
@@ -114,7 +114,7 @@ export function DashboardPage() {
       legend: { display: false },
       tooltip: {
         callbacks: {
-          label: (context) => `$${context.raw.toFixed(2)}`
+          label: (context) => `₹${context.raw.toFixed(2)}`
         }
       }
     },
@@ -124,7 +124,7 @@ export function DashboardPage() {
         ticks: {
           color: '#334155',
           font: { weight: 'bold', size: 11 },
-          callback: (value) => `$${value}`
+          callback: (value) => `₹${value}`
         },
         grid: { color: 'rgba(203, 213, 225, 0.6)' }
       },
@@ -282,7 +282,7 @@ export function DashboardPage() {
           </div>
           <div className="mt-3 sm:mt-4">
             <span className="text-xl sm:text-2xl font-black text-emerald-700 font-mono">
-              ${(summary?.totalStockValuation || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+              ₹{(summary?.totalStockValuation || 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
             </span>
             <span className="text-xs font-semibold text-slate-700 block mt-0.5">Asset cost valuation</span>
           </div>
@@ -301,7 +301,7 @@ export function DashboardPage() {
             <div className="text-right">
               <span className="text-xs font-bold text-slate-700 block">Today's Sales</span>
               <span className="text-lg sm:text-xl font-black text-emerald-700 font-mono">
-                ${(summary?.todayRevenue || 0).toFixed(2)}
+                ₹{(summary?.todayRevenue || 0).toFixed(2)}
               </span>
             </div>
           </div>
@@ -341,7 +341,7 @@ export function DashboardPage() {
                     </div>
                   </div>
                   <span className="font-bold text-slate-900 font-mono shrink-0 text-xs sm:text-sm">
-                    ${p.totalRevenue?.toFixed(2)}
+                    ₹{p.totalRevenue?.toFixed(2)}
                   </span>
                 </div>
               ))
@@ -467,7 +467,7 @@ export function DashboardPage() {
                   </div>
                   <div className="text-right">
                     <span className="font-black text-slate-900 font-mono text-sm block">
-                      ${s.totalAmount.toFixed(2)}
+                      ₹{s.totalAmount.toFixed(2)}
                     </span>
                     <span className="text-xs font-semibold text-slate-600 font-mono">
                       {new Date(s.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}

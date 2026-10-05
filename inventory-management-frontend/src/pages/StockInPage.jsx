@@ -199,7 +199,7 @@ export function StockInPage() {
 
               <div>
                 <label className="block text-xs font-bold text-slate-800 uppercase tracking-wider mb-1.5">
-                  Unit Cost Price ($)
+                  Unit Cost Price (₹)
                 </label>
                 <input
                   type="number"

@@ -66,8 +66,8 @@ export function Sidebar({ collapsed, mobileOpen, setMobileOpen }) {
             </div>
             {(!collapsed || mobileOpen) && (
               <div className="flex flex-col">
-                <span className="font-bold text-base text-white tracking-tight leading-tight">SmartInventory</span>
-                <span className="text-xs text-emerald-400 font-medium">V1 System</span>
+                <span className="font-bold text-base text-white tracking-tight leading-tight">Inventory System</span>
+                <span className="text-xs text-emerald-400 font-medium">V1</span>
               </div>
             )}
           </div>

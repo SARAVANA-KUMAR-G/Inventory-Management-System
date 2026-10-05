@@ -6,8 +6,8 @@ import { Input } from '../components/ui/Input';
 import { Boxes, ShieldAlert, KeyRound, Mail } from 'lucide-react';
 
 export function LoginPage() {
-  const [identifier, setIdentifier] = useState('admin@inventory.com');
-  const [password, setPassword] = useState('Admin@123456');
+  const [identifier, setIdentifier] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -49,7 +49,7 @@ export function LoginPage() {
           <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-700 flex items-center justify-center text-white shadow-lg shadow-emerald-900/30 mb-3">
             <Boxes className="w-7 h-7 sm:w-8 sm:h-8" />
           </div>
-          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Smart Inventory V1</h1>
+          <h1 className="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">Inventory System (V1)</h1>
           <p className="text-xs sm:text-sm text-slate-700 font-medium mt-1">Sign in to your staff or admin portal</p>
         </div>
 
@@ -68,7 +68,7 @@ export function LoginPage() {
             icon={Mail}
             value={identifier}
             onChange={(e) => setIdentifier(e.target.value)}
-            placeholder="admin@inventory.com"
+            placeholder="abc@mail.com"
           />
 
           <Input
@@ -91,14 +91,14 @@ export function LoginPage() {
           <p className="text-xs font-bold text-slate-700 uppercase tracking-wider text-center mb-3">
             Demo Credentials
           </p>
-          <div className="grid grid-cols-2 gap-2">
-            <button
+          <div className="grid grid-cols-1 gap-2">
+            {/* <button
               type="button"
               onClick={() => setDemoAccount('Admin')}
               className="px-3 py-2 text-xs font-bold rounded-xl bg-slate-100 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-300 border border-slate-300 text-slate-900 transition-colors"
             >
               Admin Demo
-            </button>
+            </button> */}
             <button
               type="button"
               onClick={() => setDemoAccount('Staff')}

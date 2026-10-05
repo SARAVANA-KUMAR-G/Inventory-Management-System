@@ -295,11 +295,11 @@ export function ProductsPage() {
                   </div>
                   <div>
                     <span className="text-[11px] font-bold text-slate-600 block">Cost Price</span>
-                    <span className="font-mono font-semibold text-slate-800">${p.costPrice.toFixed(2)}</span>
+                    <span className="font-mono font-semibold text-slate-800">₹{p.costPrice.toFixed(2)}</span>
                   </div>
                   <div>
                     <span className="text-[11px] font-bold text-slate-600 block">Selling Price</span>
-                    <span className="font-mono font-bold text-emerald-800">${p.sellingPrice.toFixed(2)}</span>
+                    <span className="font-mono font-bold text-emerald-800">₹{p.sellingPrice.toFixed(2)}</span>
                   </div>
                 </div>
 
@@ -362,10 +362,10 @@ export function ProductsPage() {
                       {p.categoryName || 'General'}
                     </td>
                     <td className="py-3 px-4 font-mono font-semibold text-slate-700">
-                      ${p.costPrice.toFixed(2)}
+                      ₹{p.costPrice.toFixed(2)}
                     </td>
                     <td className="py-3 px-4 font-mono font-bold text-slate-950">
-                      ${p.sellingPrice.toFixed(2)}
+                      ₹{p.sellingPrice.toFixed(2)}
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex items-center gap-2">
@@ -491,7 +491,7 @@ export function ProductsPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <Input
-              label="Cost Price ($)*"
+              label="Cost Price (₹)*"
               type="number"
               step="0.01"
               required
@@ -500,7 +500,7 @@ export function ProductsPage() {
               placeholder="0.00"
             />
             <Input
-              label="Selling Price ($)*"
+              label="Selling Price (₹)*"
               type="number"
               step="0.01"
               required

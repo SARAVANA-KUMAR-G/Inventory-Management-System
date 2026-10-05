@@ -120,7 +120,7 @@ export function SalesPage() {
         setShowReturnModal(false);
         loadSales();
         alert(
-          `Return processed successfully! Total refund due: $${Number(res.data?.totalRefundAmount || 0).toFixed(
+          `Return processed successfully! Total refund due: ₹${Number(res.data?.totalRefundAmount || 0).toFixed(
             2
           )}. Inventory stock has been restored.`
         );
@@ -241,7 +241,7 @@ export function SalesPage() {
                   <div>
                     <span className="text-[11px] font-bold text-slate-600 block">Total Amount</span>
                     <span className="font-mono font-black text-emerald-900 text-sm block">
-                      ${sale.grandTotal.toFixed(2)}
+                      ₹{sale.grandTotal.toFixed(2)}
                     </span>
                   </div>
                 </div>
@@ -314,7 +314,7 @@ export function SalesPage() {
                       {sale.paymentMethod}
                     </td>
                     <td className="py-3 px-4 font-mono font-bold text-slate-950">
-                      ${sale.grandTotal.toFixed(2)}
+                      ₹{sale.grandTotal.toFixed(2)}
                     </td>
                     <td className="py-3 px-4">
                       {getStatusBadge(sale.status)}
@@ -418,21 +418,21 @@ export function SalesPage() {
                   <div key={it.id} className="grid grid-cols-4 p-2.5 items-center">
                     <div className="col-span-2">
                       <p className="font-bold text-slate-950">{it.productName}</p>
-                      <span className="text-[10px] text-slate-600 font-mono font-semibold">${it.unitPrice.toFixed(2)} / {it.unit}</span>
+                      <span className="text-[10px] text-slate-600 font-mono font-semibold">₹{it.unitPrice.toFixed(2)} / {it.unit}</span>
                     </div>
                     <span className="text-center font-bold text-slate-900">{it.quantity}</span>
-                    <span className="text-right font-mono font-bold text-slate-950">${it.lineTotal.toFixed(2)}</span>
+                    <span className="text-right font-mono font-bold text-slate-950">₹{it.lineTotal.toFixed(2)}</span>
                   </div>
                 ))}
               </div>
             </div>
 
             <div className="p-3 bg-slate-50 rounded-xl space-y-1 font-mono text-right font-semibold text-slate-800 border border-slate-200">
-              <div>Subtotal: ${selectedSale.subtotal.toFixed(2)}</div>
-              {selectedSale.discountAmount > 0 && <div className="text-emerald-800 font-bold">Discount: -${selectedSale.discountAmount.toFixed(2)}</div>}
-              <div>Tax: ${selectedSale.taxAmount.toFixed(2)}</div>
+              <div>Subtotal: ₹{selectedSale.subtotal.toFixed(2)}</div>
+              {selectedSale.discountAmount > 0 && <div className="text-emerald-800 font-bold">Discount: -₹{selectedSale.discountAmount.toFixed(2)}</div>}
+              <div>Tax: ₹{selectedSale.taxAmount.toFixed(2)}</div>
               <div className="text-sm font-black text-slate-950 pt-1 border-t border-slate-300">
-                Grand Total: ${selectedSale.grandTotal.toFixed(2)}
+                Grand Total: ₹{selectedSale.grandTotal.toFixed(2)}
               </div>
             </div>
 
@@ -473,7 +473,7 @@ export function SalesPage() {
               </div>
               <div>
                 <span className="text-slate-600 font-bold block">Original Total:</span>
-                <span className="font-bold text-slate-900 font-mono text-sm">${selectedSale.grandTotal.toFixed(2)}</span>
+                <span className="font-bold text-slate-900 font-mono text-sm">₹{selectedSale.grandTotal.toFixed(2)}</span>
               </div>
             </div>
 
@@ -499,7 +499,7 @@ export function SalesPage() {
                         <div className="col-span-5 pr-2">
                           <p className="font-bold text-slate-900 text-sm leading-tight">{it.productName}</p>
                           <span className="text-[10px] text-slate-600 font-mono font-semibold">
-                            ${it.unitPrice.toFixed(2)} / {it.unit} (SKU: {it.productSku})
+                            ₹{it.unitPrice.toFixed(2)} / {it.unit} (SKU: {it.productSku})
                           </span>
                           {it.returnedQuantity > 0 && (
                             <span className="block text-[10px] text-amber-700 font-bold">
@@ -578,7 +578,7 @@ export function SalesPage() {
               </div>
               <div className="text-left sm:text-right">
                 <span className="text-xs font-bold text-emerald-900 block">Total Refund Due Customer:</span>
-                <span className="text-lg sm:text-xl font-black font-mono text-emerald-950">${totalRefundAmount.toFixed(2)}</span>
+                <span className="text-lg sm:text-xl font-black font-mono text-emerald-950">₹{totalRefundAmount.toFixed(2)}</span>
               </div>
             </div>
 
